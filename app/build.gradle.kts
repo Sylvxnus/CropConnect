@@ -4,11 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.cropconnect"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.cropconnect"
@@ -16,7 +12,6 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,6 +24,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -36,11 +32,23 @@ android {
 }
 
 dependencies {
-    implementation(libs.activity.ktx)
+    // Core Android
     implementation(libs.appcompat)
-    implementation(libs.constraintlayout)
     implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(libs.ext.junit)
+    implementation(libs.constraintlayout)
+    implementation(libs.activity.ktx)
+
+    // OSMDroid for maps
+    implementation(libs.osmdroid.android)
+
+    // Retrofit for API calls
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    // OkHttp for HTTP logging
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    //Security.Crypto for the JWT token implementation
+    implementation(libs.security.crypto)
 }
