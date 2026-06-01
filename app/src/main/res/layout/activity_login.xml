@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This is our frontend file for the related backend file, we will make all ui changes in here
+either using code in xml files or the built in figma like tools-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
