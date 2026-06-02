@@ -45,8 +45,7 @@
             android:exported="false"/>
         <activity android:name=".activities.guest.FoodBankDetailsEngine"
             android:exported="false"/>
-
-        <!-- Producer code -->
+        <!-- Producer code-->
         <activity android:name=".activities.producer.PROD_Dashboard"
             android:exported="false"/>
         <activity android:name=".activities.producer.WeatherAdvice"

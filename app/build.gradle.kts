@@ -33,6 +33,7 @@ android {
 
 dependencies {
     // Core Android
+    implementation(libs.preference)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)

@@ -9,6 +9,7 @@ activityKtx = "1.8.0"
 constraintlayout = "2.1.4"
 okhttp = "5.3.2"
 osmdroidAndroid = "6.1.20"
+preference = "1.2.1"
 retrofit = "3.0.0"
 securityCrypto = "1.1.0-alpha06"
 
@@ -23,6 +24,7 @@ activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "osmdroidAndroid" }
+preference = { module = "androidx.preference:preference", version.ref = "preference" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
