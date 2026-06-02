@@ -22,6 +22,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 
 public class Maps extends AppCompatActivity {
 
@@ -41,6 +44,8 @@ public class Maps extends AppCompatActivity {
     //Default variables for the map centre, centers the map to Ladywood, Birmingham
     private static final double LADYWOOD_LATITUDE = 52.4862;
     private static final double LADYWOOD_LONGITUDE = -1.9003;
+
+
 
 
 
@@ -75,6 +80,7 @@ public class Maps extends AppCompatActivity {
         //sets up the filter buttons and load food banks from the backend
         setupFilterButtons();
         loadFoodBanksFromBackend();
+        setupSearch();
     }
 
 
@@ -182,6 +188,52 @@ public class Maps extends AppCompatActivity {
         marker.setSnippet("Open Mon-Fri 9am-5pm");
         mapView.getOverlays().add(marker);
         mapView.invalidate();
+    }
+
+// This is the function that sets up a live search on the search bar, as the user types it...
+    // The program starts calling the backend and updates the map pins to only show matching food banks
+    //if the search bar is then cleared by the user, then the program will fall back to showing all of the default pins
+    // and the map will return to the default state.
+
+    //TEST
+    //Ran to see if this would actually filter out the foodbank that the user hasn't searched for,
+    //Typed Ladywood incrementally letter by letter and the program filtered out the foodbamks that didnt contain the letter L initially
+    //However, after entering the whole Ladywood search, there is only one pin left on the map, Success
+    private void setupSearch() {
+        EditText etSearch = findViewById(R.id.etSearch);
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s.toString().trim();
+                if (query.isEmpty()) {
+                    refreshPins();
+                } else {
+                    ApiClient.getApiService().searchFoodBanks(query).enqueue(new Callback<List<FoodBank>>() {
+                        @Override
+                        public void onResponse(Call<List<FoodBank>> call, Response<List<FoodBank>> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                mapView.getOverlays().clear();
+                                for (FoodBank fb : response.body()) {
+                                    addPin(fb.getLatitude(), fb.getLongitude(), fb.getName(), fb.getPhone());
+                                }
+                                mapView.invalidate();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<FoodBank>> call, Throwable t) {
+                            Log.e("Maps", "Search failed: " + t.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
 
