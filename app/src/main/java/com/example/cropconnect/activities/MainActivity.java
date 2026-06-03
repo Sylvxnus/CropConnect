@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cropconnect.R;
+import com.example.cropconnect.activities.foodbank.FoodBankLoginActivity;
 import com.example.cropconnect.activities.guest.Maps;
 import com.example.cropconnect.activities.producer.ProducerEntryActivity;
 import com.google.android.material.button.MaterialButton;
@@ -26,9 +27,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, ProducerEntryActivity.class));
         });
 
-        // Food Bank → LoginActivity (team's existing foodbank login)
+        // Food Bank → FoodBankLoginActivity (team's existing foodbank login)
         btnFoodBank.setOnClickListener(v -> {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, FoodBankLoginActivity.class));
         });
 
         // Guest → Maps (existing guest map screen)

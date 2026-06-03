@@ -73,6 +73,9 @@
             android:exported="false"/>
         <activity android:name=".activities.foodbank.ProcessDonations"
             android:exported="false"/>
+        <activity
+            android:name=".activities.foodbank.FoodBankLoginActivity"
+            android:exported="false" />
 
     </application>
 
