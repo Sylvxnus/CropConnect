@@ -10,6 +10,8 @@ import com.example.cropconnect.activities.foodbank.FoodBankLoginActivity;
 import com.example.cropconnect.activities.guest.Maps;
 import com.example.cropconnect.activities.producer.ProducerEntryActivity;
 import com.google.android.material.button.MaterialButton;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +23,16 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton btnAllotmentDonator = findViewById(R.id.btnAllotmentDonator);
         MaterialButton btnFoodBank         = findViewById(R.id.btnFoodBank);
         MaterialButton btnGuest            = findViewById(R.id.btnGuest);
+
+        // Language Selector
+        ImageButton btnLanguage = findViewById(R.id.btnLanguage);
+
+        btnLanguage.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(this, btnLanguage);
+            popupMenu.getMenu().add("English");
+            popupMenu.getMenu().add("Urdu");
+            popupMenu.show();
+        });
 
         // Allotment Donator → ProducerEntryActivity (Login / Sign up)
         btnAllotmentDonator.setOnClickListener(v -> {
