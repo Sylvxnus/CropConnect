@@ -1,6 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<!--Full screen relative layout so that the map and search bar can overlap one another -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- OSMDroid map view, this fills the entire screen as the base layer -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <!-- Search and filter container, this floats over the map and is pinned to the bottom of the screen -->
+    <LinearLayout
+        android:id="@+id/searchContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="@drawable/rounded_search_container"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!--Search bar, which will later implement (hopefully) the backend of my search engine -->
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="Search For Food or Food Bank..."
+            android:padding="8dp" />
+
+        <!-- Row of the filter buttons, each for toggling a filter on the map pins -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!--Filter: Only to show food banks that require no referral code -->
+            <Button
+                android:id="@+id/btnNoReferral"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:backgroundTint="#2E7D32"
+                android:text="No Referral"
+                android:textSize="11sp" />
+
+
+            <!-- Filter: only to show food banks that are currently open -->
+            <Button
+                android:id="@+id/btnOpenNow"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:backgroundTint="#2E7D32"
+                android:text="Open Now"
+                android:textSize="11sp" />
+
+            <!--filter: only to show food banks that have fresh produce available-->
+            <Button
+                android:id="@+id/btnFreshProduce"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:backgroundTint="#2E7D32"
+                android:text="Fresh Produce"
+                android:textSize="11sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

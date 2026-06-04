@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- This is our frontend file for the related backend file, we will make all ui changes in here
+either using code in xml files or the built in figma like tools-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#F5F5F5">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CropConnect"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="#2E7D32"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
