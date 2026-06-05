@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CropConnect</string>
+    <string name="who_are_you">آپ کون ہیں؟</string>
+    <string name="allotment_donator">الاٹمنٹ عطیہ دہندہ</string>
+    <string name="food_bank">فوڈ بینک</string>
+    <string name="browse_as_guest">مہمان کے طور پر دیکھیں</string>
+    <string name="select_language">زبان منتخب کریں</string>
+    <string name="english">انگریزی</string>
+    <string name="urdu">اردو</string>
+</resources>

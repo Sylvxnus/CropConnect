@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">CropConnect</string>
+    <string name="who_are_you">Who are you?</string>
+    <string name="allotment_donator">Allotment Donator</string>
+    <string name="food_bank">Food Bank</string>
+    <string name="browse_as_guest">Browse as Guest</string>
+    <string name="select_language">Select language</string>
+    <string name="english">English</string>
+    <string name="urdu">Urdu</string>
 </resources>
