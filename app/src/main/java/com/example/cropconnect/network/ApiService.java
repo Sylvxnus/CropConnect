@@ -24,6 +24,10 @@ public interface ApiService {
     @GET("api/foodbanks/search")
     Call<List<FoodBank>> searchFoodBanks(@Query("query") String query);
 
+    // Login — returns the producer object if credentials match
+    @POST("api/foodbanks/login")
+    Call<FoodBank> loginFoodBank(@Body FoodBank loginRequest);
+
     // ── Producer (allotment donator) endpoints ─────────────────────────────
 
     // Register a new producer
