@@ -40,6 +40,17 @@ public class SessionManager {
         editor.apply();
     }
 
+    // ── Save food bank session after login ──────────────────────────────────
+    public static void saveFoodBankSession(Context context,
+                                           com.example.cropconnect.models.FoodBank foodBank) {
+        SharedPreferences.Editor editor = getPrefs(context).edit();
+        editor.putLong(KEY_PROD_ID, foodBank.getId());
+        editor.putString(KEY_PROD_NAME, foodBank.getName());
+        editor.putString(KEY_PROD_EMAIL, foodBank.getFoodEmail());
+        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.apply();
+    }
+
     // ── Getters ────────────────────────────────────────────────────────────
     public static int getProdId(Context context) {
         return getPrefs(context).getInt(KEY_PROD_ID, -1);

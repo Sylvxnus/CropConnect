@@ -10,20 +10,23 @@ public class FoodBank {
 
     //Unique id identifier for the food bank
     @SerializedName("id")
-    private Long id;
+    private Long FoodId;
 
     //Display name for the food bank
     @SerializedName("name")
-    private String name;
+    private String FoodName;
 
     //contact email
     @SerializedName("email")
-    private String email;
+    private String FoodEmail;
 
     //contact phone number - shown on the map inside the pin
     @SerializedName("phone")
-    private String phone;
+    private String FoodPhone;
 
+    //password
+    @SerializedName("password")
+    private String FoodPassword;
 
     //GPS coords used to place the pin on the map
     @SerializedName("longitude")
@@ -42,13 +45,23 @@ public class FoodBank {
     @SerializedName("hasFreshProduce")
     private boolean hasFreshProduce;
 
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public String getPhone() { return phone; }
+    public Long getId() { return FoodId; }
+    public String getName() { return FoodName; }
+    public String getFoodEmail() { return FoodEmail; }
+    public String getPhone() { return FoodPhone; }
+
+    public long getFoodId() { return FoodId; }
     public double getLongitude() { return longitude; }
     public double getLatitude() { return latitude; }
     public boolean isNoReferral() { return noReferral; }
     public boolean isOpen() { return open; }
     public boolean isHasFreshProduce() { return hasFreshProduce; }
+
+    public void setFoodEmail(String foodEmail){
+        this.FoodEmail = foodEmail;
+    }
+
+    public void setFoodPassword(String foodPassword){
+        this.FoodPassword = foodPassword;
+    }
 }
