@@ -104,7 +104,7 @@ public class FoodBankLoginActivity extends AppCompatActivity {
     }
 
     private void navigateToDashboard() {
-        Intent intent = new Intent(this, FOOD_Dashboard.class);
+        Intent intent = new Intent(this, FB_Dashboard.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
