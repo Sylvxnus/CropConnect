@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorSurface">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurface"
+        app:title="Dashboard" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="12dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Metric cards row 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp">
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView android:text="Total received (kg)"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/tvTotalKg"
+                            android:text="1,284"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/tvTotalKgDelta"
+                            android:text="+12% this month"
+                            android:textSize="11sp"
+                            android:textColor="#3B6D11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp">
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView android:text="Active allotments"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/tvActiveAllotments"
+                            android:text="23"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:text="+3 new"
+                            android:textSize="11sp"
+                            android:textColor="#3B6D11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <!-- Metric cards row 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="14dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp">
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView android:text="Pending donations"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/tvPendingCount"
+                            android:text="7"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:text="awaiting pickup"
+                            android:textSize="11sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp">
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView android:text="Families served"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/tvFamiliesServed"
+                            android:text="341"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:text="+8% vs last month"
+                            android:textSize="11sp"
+                            android:textColor="#3B6D11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <!-- Pie chart card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:text="FOOD BY ALLOTMENT"
+                        android:textSize="11sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:letterSpacing="0.08"
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Bar chart card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:text="WEEKLY INTAKE (KG)"
+                        android:textSize="11sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:letterSpacing="0.08"
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Stock levels card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:text="CURRENT STOCK LEVELS"
+                        android:textSize="11sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:letterSpacing="0.08"
+                        android:layout_marginBottom="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <!-- Each stock row: label + progress bar + percentage -->
+                    <include layout="@layout/item_stock_row"
+                        android:id="@+id/stockVeg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <include layout="@layout/item_stock_row"
+                        android:id="@+id/stockFruit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"/>
+                    <include layout="@layout/item_stock_row"
+                        android:id="@+id/stockHerbs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"/>
+                    <include layout="@layout/item_stock_row"
+                        android:id="@+id/stockGrains"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"/>
+                    <include layout="@layout/item_stock_row"
+                        android:id="@+id/stockLegumes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"/>
+
+                    <TextView
+                        android:id="@+id/tvStockAlert"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="⚠ Legumes running low"
+                        android:textSize="12sp"
+                        android:textColor="#A32D2D"
+                        android:visibility="gone"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Recent activity card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:text="RECENT ACTIVITY"
+                        android:textSize="11sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:letterSpacing="0.08"
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvRecentActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Pending donations card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:text="PENDING DONATIONS"
+                            android:textSize="11sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:letterSpacing="0.08"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                        <TextView
+                            android:id="@+id/tvViewAllDonations"
+                            android:text="View all →"
+                            android:textSize="12sp"
+                            android:textColor="#3B6D11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvPendingDonations"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:nestedScrollingEnabled="false"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        app:menu="@menu/foodbank_bottom_nav" />
+
+</LinearLayout>

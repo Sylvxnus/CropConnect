@@ -1,6 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/surface"
+    android:fillViewport="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My allotment"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome back"
+            android:textSize="14sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Credits hero card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#EAF3DE">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="18dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:gravity="center"
+                    android:text="★"
+                    android:textSize="22sp"
+                    android:textColor="#27500A"
+                    android:background="@drawable/bg_circle_green"
+                    android:layout_marginEnd="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvCreditsNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:textColor="#27500A"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="credits earned"
+                        android:textSize="13sp"
+                        android:textColor="#3B6D11"/>
+
+                    <TextView
+                        android:id="@+id/tvCreditsThisMonth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+0 credits this month · 1 credit per kg"
+                        android:textSize="12sp"
+                        android:textColor="#3B6D11"
+                        android:layout_marginTop="4dp"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRedeem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Redeem"
+                    android:textSize="12sp"
+                    android:textColor="#27500A"
+                    app:strokeColor="#C0DD97"
+                    app:strokeWidth="1dp"
+                    app:backgroundTint="@android:color/transparent"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Metric cards row 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#EAF3DE">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Total donated (kg)" android:textSize="12sp" android:textColor="#3B6D11"
+                        android:layout_marginBottom="4dp"/>
+                    <TextView android:id="@+id/tvTotalKg" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="0"
+                        android:textSize="20sp" android:textStyle="bold" android:textColor="#27500A"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#EAF3DE">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Donations made" android:textSize="12sp" android:textColor="#3B6D11"
+                        android:layout_marginBottom="4dp"/>
+                    <TextView android:id="@+id/tvDonationCount" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="0"
+                        android:textSize="20sp" android:textStyle="bold" android:textColor="#27500A"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <!-- Metric cards row 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#FAEEDA">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Awaiting collection" android:textSize="12sp" android:textColor="#854F0B"
+                        android:layout_marginBottom="4dp"/>
+                    <TextView android:id="@+id/tvAwaitingCount" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="0"
+                        android:textSize="20sp" android:textStyle="bold" android:textColor="#633806"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#EAF3DE">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Food banks helped" android:textSize="12sp" android:textColor="#3B6D11"
+                        android:layout_marginBottom="4dp"/>
+                    <TextView android:id="@+id/tvFoodBanksHelped" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="0"
+                        android:textSize="20sp" android:textStyle="bold" android:textColor="#27500A"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <!-- Pie chart card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@android:color/white">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="FOOD TYPES DONATED"
+                    android:textSize="12sp" android:textColor="?android:attr/textColorSecondary"
+                    android:letterSpacing="0.05" android:layout_marginBottom="12dp"/>
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Bar chart card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@android:color/white">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="MONTHLY KG DONATED"
+                    android:textSize="12sp" android:textColor="?android:attr/textColorSecondary"
+                    android:letterSpacing="0.05" android:layout_marginBottom="12dp"/>
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Awaiting collection card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@android:color/white">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="ACCEPTED — AWAITING COLLECTION"
+                    android:textSize="12sp" android:textColor="?android:attr/textColorSecondary"
+                    android:letterSpacing="0.05" android:layout_marginBottom="4dp"/>
+                <LinearLayout
+                    android:id="@+id/llPendingContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Recent activity card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@android:color/white">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="RECENT ACTIVITY"
+                    android:textSize="12sp" android:textColor="?android:attr/textColorSecondary"
+                    android:letterSpacing="0.05" android:layout_marginBottom="4dp"/>
+                <LinearLayout
+                    android:id="@+id/llActivityContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Bottom nav -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:menu="@menu/producer_nav"/>
+
+    </LinearLayout>
+</ScrollView>

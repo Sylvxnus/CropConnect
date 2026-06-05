@@ -52,4 +52,7 @@ dependencies {
 
     //Security.Crypto for the JWT token implementation
     implementation(libs.security.crypto)
+
+    // Used for displaying and making charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

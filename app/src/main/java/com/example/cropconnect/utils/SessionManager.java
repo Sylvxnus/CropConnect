@@ -28,6 +28,8 @@ public class SessionManager {
     private static final String KEY_PROD_POSTCODE = "prod_postcode";
     private static final String KEY_IS_LOGGED_IN  = "is_logged_in";
 
+    private static final String KEY_CREDITS = "credits";
+
     // ── Save producer session after login ──────────────────────────────────
     public static void saveProducerSession(Context context,
                                            com.example.cropconnect.models.Producer producer) {
@@ -37,6 +39,7 @@ public class SessionManager {
         editor.putString(KEY_PROD_EMAIL, producer.getProdEmail());
         editor.putString(KEY_PROD_POSTCODE, producer.getProdPostcode());
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        //editor.putInt(KEY_CREDITS, producer.getCredits());
         editor.apply();
     }
 
@@ -80,5 +83,15 @@ public class SessionManager {
     // ── Helper ─────────────────────────────────────────────────────────────
     private static SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+    }
+
+    // ── gets credits ─────────────────────────────────────────────────────────────
+    public static int getCredits(Context context) {
+        return getPrefs(context).getInt(KEY_CREDITS, 0);
+    }
+
+    // ── saves amount of credits ─────────────────────────────────────────────────────────────
+    public static void saveCredits(Context context, int credits) {
+        getPrefs(context).edit().putInt(KEY_CREDITS, credits).apply();
     }
 }

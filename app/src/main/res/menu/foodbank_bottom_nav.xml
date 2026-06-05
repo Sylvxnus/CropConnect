@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_dashboard"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_dashboard" />
+    <item android:id="@+id/nav_donations"
+        android:title="Donations"
+        android:icon="@drawable/ic_gift"
+         />
+    <item android:id="@+id/nav_stock"
+        android:title="Stock"
+        android:icon="@drawable/ic_box" />
+    <item android:id="@+id/nav_settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings" />
+</menu>

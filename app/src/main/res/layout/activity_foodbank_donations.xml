@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorSurface">
+
+    <!-- Top app bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurface"
+        app:title="Donations"
+        app:navigationIcon="@drawable/ic_back"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+    <!-- Search bar -->
+    <com.google.android.material.search.SearchBar
+        android:id="@+id/searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:hint="Search allotment or item..." />
+
+    <!-- Status filter chips -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAll"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All"
+                android:checked="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPending"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pending" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipConfirmed"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirmed" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTransit"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="In transit" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCollected"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Collected" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- Result count -->
+    <TextView
+        android:id="@+id/tvResultCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp"
+        android:textSize="12sp"
+        android:textColor="?attr/colorOnSurfaceVariant" />
+
+    <!-- Donations list -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDonations"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="12dp"
+        android:clipToPadding="false" />
+
+    <!-- Bottom navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        app:menu="@menu/foodbank_bottom_nav"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+</LinearLayout>

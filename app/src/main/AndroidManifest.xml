@@ -76,6 +76,7 @@
         <activity
             android:name=".activities.foodbank.FoodBankLoginActivity"
             android:exported="false" />
+        <activity android:name=".activities.foodbank.FoodBankDonationsActivity" />
 
     </application>
 
