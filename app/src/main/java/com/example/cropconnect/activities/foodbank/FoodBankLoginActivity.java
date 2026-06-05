@@ -37,14 +37,13 @@ public class FoodBankLoginActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
-        tilEmail       = findViewById(R.id.tilEmail);
-        tilPassword    = findViewById(R.id.tilPassword);
-        etEmail        = findViewById(R.id.etEmail);
-        etPassword     = findViewById(R.id.etPassword);
-        btnLogin       = findViewById(R.id.btnLogin);
-        textLoginError = findViewById(R.id.textLoginError);
+        tilEmail       = findViewById(R.id.tilFoodbankEmail);
+        tilPassword    = findViewById(R.id.tilFoodbankPassword);
+        etEmail        = findViewById(R.id.etFoodbankEmail);
+        etPassword     = findViewById(R.id.etFoodbankPassword);
+        btnLogin       = findViewById(R.id.btnFoodbankLogin);
+        textLoginError = findViewById(R.id.textFoodbankLoginError);
     }
-
     private void setupLoginButton() {
         btnLogin.setOnClickListener(v -> {
             if (validateForm()) loginFoodBank();

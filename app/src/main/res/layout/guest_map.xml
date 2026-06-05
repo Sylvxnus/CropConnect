@@ -47,7 +47,7 @@
                 android:layout_height="36dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:backgroundTint="#2E7D32"
+                android:backgroundTint="#6A0DAD"
                 android:text="No Referral"
                 android:textSize="11sp" />
 
@@ -59,7 +59,7 @@
                 android:layout_height="36dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:backgroundTint="#2E7D32"
+                android:backgroundTint="#6A0DAD"
                 android:text="Open Now"
                 android:textSize="11sp" />
 
@@ -69,7 +69,7 @@
                 android:layout_width="0dp"
                 android:layout_height="36dp"
                 android:layout_weight="1"
-                android:backgroundTint="#2E7D32"
+                android:backgroundTint="#6A0DAD"
                 android:text="Fresh Produce"
                 android:textSize="11sp" />
         </LinearLayout>
