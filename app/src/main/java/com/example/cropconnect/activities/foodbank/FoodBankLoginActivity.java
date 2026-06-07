@@ -44,6 +44,7 @@ public class FoodBankLoginActivity extends AppCompatActivity {
         btnLogin       = findViewById(R.id.btnFoodbankLogin);
         textLoginError = findViewById(R.id.textFoodbankLoginError);
     }
+
     private void setupLoginButton() {
         btnLogin.setOnClickListener(v -> {
             if (validateForm()) loginFoodBank();
@@ -76,8 +77,8 @@ public class FoodBankLoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         FoodBank loginRequest = new FoodBank();
-        loginRequest.setFoodEmail(email);
-        loginRequest.setFoodPassword(password);
+        loginRequest.setFbEmail(email);
+        loginRequest.setFbPassword(password);
 
         btnLogin.setEnabled(false);
 

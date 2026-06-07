@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class FoodBank {
 
-    @SerializedName("id")
+    @SerializedName("fbId")
     private long fbId;
 
-    @SerializedName("name")
+    @SerializedName("fbName")
     private String fbName;
 
     @SerializedName("email")
@@ -36,7 +36,6 @@ public class FoodBank {
 
     public FoodBank() {}
 
-    // ── Standard getters/setters ───────────────────────────────────────────
     public long getFbId()                        { return fbId; }
     public void setFbId(long fbId)               { this.fbId = fbId; }
 
@@ -45,6 +44,7 @@ public class FoodBank {
 
     public String getFbEmail()                   { return fbEmail; }
     public void setFbEmail(String fbEmail)       { this.fbEmail = fbEmail; }
+    public void setFbPassword(String fbPassword) { this.fbPassword = fbPassword; }
 
     public String getFbPhone()                   { return fbPhone; }
     public void setFbPhone(String fbPhone)       { this.fbPhone = fbPhone; }
@@ -56,15 +56,7 @@ public class FoodBank {
     public void setFbLat(double fbLat)           { this.fbLat = fbLat; }
 
     public String getFbPassword()                { return fbPassword; }
-    public void setFbPassword(String fbPassword) { this.fbPassword = fbPassword; }
 
-    // ── Aliases for FoodBankLoginActivity ─────────────────────────────────
-    public void setFoodEmail(String email)       { this.fbEmail = email; }
-    public String getFoodEmail()                 { return fbEmail; }
-    public void setFoodPassword(String password) { this.fbPassword = password; }
-    public String getFoodPassword()              { return fbPassword; }
-
-    // ── Aliases for Maps.java ──────────────────────────────────────────────
     public String getName()                      { return fbName; }
     public String getPhone()                     { return fbPhone; }
     public double getLatitude()                  { return fbLat; }

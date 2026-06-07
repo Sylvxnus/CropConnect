@@ -2,6 +2,7 @@ package com.example.cropconnect.network;
 
 import com.example.cropconnect.models.FoodBank;
 import com.example.cropconnect.models.FoodBankProduct;
+import com.example.cropconnect.models.FoodBankSearchResult;
 import com.example.cropconnect.models.Producer;
 
 import java.util.List;
@@ -18,16 +19,15 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     // ── FoodBank auth ──────────────────────────────────────────────────────
-    // Called by FoodBankLoginActivity
     @POST("api/foodbanks/login")
     Call<FoodBank> loginFoodBank(@Body FoodBank loginRequest);
 
-    // ── FoodBank data — called by Maps.java ────────────────────────────────
+    // ── FoodBank data ──────────────────────────────────────────────────────
     @GET("api/foodbanks")
     Call<List<FoodBank>> getFoodBanks();
 
     @GET("api/foodbanks/search")
-    Call<List<FoodBank>> searchFoodBanks(@Query("query") String query);
+    Call<List<FoodBankSearchResult>> searchFoodBanksAndProducts(@Query("query") String query);
 
     // ── Producer auth ──────────────────────────────────────────────────────
     @POST("api/producers")
@@ -36,7 +36,7 @@ public interface ApiService {
     @POST("api/producers/login")
     Call<Producer> loginProducer(@Body Producer loginRequest);
 
-    // ── Products (foodbank inventory) ──────────────────────────────────────
+    // ── Products ───────────────────────────────────────────────────────────
     @GET("api/products")
     Call<List<FoodBankProduct>> getProducts(@Query("fbId") long fbId);
 
