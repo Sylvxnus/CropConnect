@@ -3,8 +3,10 @@ package com.example.cropconnect.activities.guest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -67,7 +69,11 @@ public class Maps extends AppCompatActivity {
         btnDirections.setVisibility(View.GONE);
         btnDirections.setOnClickListener(v -> fetchAndDrawRoute(currentDestLat, currentDestLon));
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-
+        findViewById(R.id.allotment_moreinfo).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.birmingham.gov.uk/allotments"));
+            startActivity(intent);
+        });
         setupFilterButtons();
         loadFoodBanksFromBackend();
         setupSearch();
