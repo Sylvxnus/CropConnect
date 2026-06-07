@@ -2,66 +2,78 @@ package com.example.cropconnect.models;
 
 import com.google.gson.annotations.SerializedName;
 
-
-//Model class representing a food bank fetched from the backend API
-//Each field maps to a JSON key returned by /api/foodbanks
 public class FoodBank {
 
-
-    //Unique id identifier for the food bank
     @SerializedName("id")
-    private Long FoodId;
+    private long fbId;
 
-    //Display name for the food bank
     @SerializedName("name")
-    private String FoodName;
+    private String fbName;
 
-    //contact email
     @SerializedName("email")
-    private String FoodEmail;
+    private String fbEmail;
 
-    //contact phone number - shown on the map inside the pin
     @SerializedName("phone")
-    private String FoodPhone;
+    private String fbPhone;
 
-    //password
-    @SerializedName("password")
-    private String FoodPassword;
-
-    //GPS coords used to place the pin on the map
     @SerializedName("longitude")
-    private double longitude;
+    private double fbLong;
 
     @SerializedName("latitude")
-    private double latitude;
+    private double fbLat;
 
+    @SerializedName("password")
+    private String fbPassword;
 
-    //Filter flags - used in the filter buttons on the map screen
     @SerializedName("noReferral")
     private boolean noReferral;
 
     @SerializedName("open")
     private boolean open;
+
     @SerializedName("hasFreshProduce")
     private boolean hasFreshProduce;
 
-    public Long getId() { return FoodId; }
-    public String getName() { return FoodName; }
-    public String getFoodEmail() { return FoodEmail; }
-    public String getPhone() { return FoodPhone; }
+    public FoodBank() {}
 
-    public long getFoodId() { return FoodId; }
-    public double getLongitude() { return longitude; }
-    public double getLatitude() { return latitude; }
-    public boolean isNoReferral() { return noReferral; }
-    public boolean isOpen() { return open; }
-    public boolean isHasFreshProduce() { return hasFreshProduce; }
+    // ── Standard getters/setters ───────────────────────────────────────────
+    public long getFbId()                        { return fbId; }
+    public void setFbId(long fbId)               { this.fbId = fbId; }
 
-    public void setFoodEmail(String foodEmail){
-        this.FoodEmail = foodEmail;
-    }
+    public String getFbName()                    { return fbName; }
+    public void setFbName(String fbName)         { this.fbName = fbName; }
 
-    public void setFoodPassword(String foodPassword){
-        this.FoodPassword = foodPassword;
-    }
+    public String getFbEmail()                   { return fbEmail; }
+    public void setFbEmail(String fbEmail)       { this.fbEmail = fbEmail; }
+
+    public String getFbPhone()                   { return fbPhone; }
+    public void setFbPhone(String fbPhone)       { this.fbPhone = fbPhone; }
+
+    public double getFbLong()                    { return fbLong; }
+    public void setFbLong(double fbLong)         { this.fbLong = fbLong; }
+
+    public double getFbLat()                     { return fbLat; }
+    public void setFbLat(double fbLat)           { this.fbLat = fbLat; }
+
+    public String getFbPassword()                { return fbPassword; }
+    public void setFbPassword(String fbPassword) { this.fbPassword = fbPassword; }
+
+    // ── Aliases for FoodBankLoginActivity ─────────────────────────────────
+    public void setFoodEmail(String email)       { this.fbEmail = email; }
+    public String getFoodEmail()                 { return fbEmail; }
+    public void setFoodPassword(String password) { this.fbPassword = password; }
+    public String getFoodPassword()              { return fbPassword; }
+
+    // ── Aliases for Maps.java ──────────────────────────────────────────────
+    public String getName()                      { return fbName; }
+    public String getPhone()                     { return fbPhone; }
+    public double getLatitude()                  { return fbLat; }
+    public double getLongitude()                 { return fbLong; }
+    public boolean isNoReferral()                { return noReferral; }
+    public boolean isOpen()                      { return open; }
+    public boolean isHasFreshProduce()           { return hasFreshProduce; }
+
+    public void setNoReferral(boolean v)         { this.noReferral = v; }
+    public void setOpen(boolean v)               { this.open = v; }
+    public void setHasFreshProduce(boolean v)    { this.hasFreshProduce = v; }
 }
