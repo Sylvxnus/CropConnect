@@ -191,7 +191,10 @@ public class FB_Dashboard extends AppCompatActivity
                 startActivity(new Intent(this, FoodBankDonationsActivity.class));
                 return true;
             }
-            // Add nav_stock and nav_settings here when you build those screens
+            if (id == R.id.nav_stock) {
+                startActivity(new Intent(this, ViewStock.class));
+                return true;
+            }
             return id == R.id.nav_dashboard;
         });
     }

@@ -67,16 +67,18 @@
         <!-- Food Bank -->
         <activity android:name=".activities.foodbank.FB_Dashboard"
             android:exported="false"/>
-        <activity android:name=".activities.foodbank.ViewStock"
+        <activity android:name=".activities.foodbank.FoodBankLoginActivity"
             android:exported="false"/>
-        <activity android:name=".activities.foodbank.AlterStock"
+        <activity android:name=".activities.foodbank.FoodBankDonationsActivity"
             android:exported="false"/>
         <activity android:name=".activities.foodbank.ProcessDonations"
             android:exported="false"/>
-        <activity
-            android:name=".activities.foodbank.FoodBankLoginActivity"
-            android:exported="false" />
-        <activity android:name=".activities.foodbank.FoodBankDonationsActivity" />
+        <activity android:name=".activities.foodbank.ViewStock"
+            android:exported="false"
+            android:parentActivityName=".activities.foodbank.FB_Dashboard"/>
+        <activity android:name=".activities.foodbank.AlterStock"
+            android:exported="false"
+            android:parentActivityName=".activities.foodbank.ViewStock"/>
 
     </application>
 

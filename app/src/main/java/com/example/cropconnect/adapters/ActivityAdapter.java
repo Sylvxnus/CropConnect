@@ -1,23 +1,30 @@
 package com.example.cropconnect.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.cropconnect.R;
+
 import java.util.List;
 
-public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHolder> {
+public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ActivityViewHolder> {
 
     public static class ActivityItem {
-        public String text;
-        public String time;
-        public int dotColor;
+        public final String text;
+        public final String time;
+        public final int    dotColor;
+
         public ActivityItem(String text, String time, int dotColor) {
-            this.text = text; this.time = time; this.dotColor = dotColor;
+            this.text     = text;
+            this.time     = time;
+            this.dotColor = dotColor;
         }
     }
 
@@ -26,35 +33,37 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
     public ActivityAdapter(Context context, List<ActivityItem> items) {
         this.context = context;
-        this.items = items;
+        this.items   = items;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_activity_row, parent, false);
-        return new ViewHolder(v);
+    public ActivityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.item_activity_row, parent, false);
+        return new ActivityViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder h, int position) {
+    public void onBindViewHolder(@NonNull ActivityViewHolder h, int position) {
         ActivityItem item = items.get(position);
-        h.tvText.setText(item.text);
-        h.tvTime.setText(item.time);
-        h.dot.setBackgroundColor(item.dotColor);
+        h.tvActivityText.setText(item.text);
+        h.tvActivityTime.setText(item.time);
+        h.viewDot.setBackgroundTintList(ColorStateList.valueOf(item.dotColor));
     }
 
     @Override
     public int getItemCount() { return items.size(); }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvText, tvTime;
-        View dot;
-        ViewHolder(View v) {
+    static class ActivityViewHolder extends RecyclerView.ViewHolder {
+        TextView tvActivityText, tvActivityTime;
+        View     viewDot;
+
+        ActivityViewHolder(@NonNull View v) {
             super(v);
-            tvText = v.findViewById(R.id.tvActivityText);
-            tvTime = v.findViewById(R.id.tvActivityTime);
-            dot    = v.findViewById(R.id.viewDot);
+            tvActivityText = v.findViewById(R.id.tvActivityText);
+            tvActivityTime = v.findViewById(R.id.tvActivityTime);
+            viewDot        = v.findViewById(R.id.viewDot);
         }
     }
 }
