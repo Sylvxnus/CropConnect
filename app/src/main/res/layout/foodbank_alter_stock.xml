@@ -1,33 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
-    tools:context=".activities.foodbank.FoodbankAlterStockActivity">
+    android:background="#F5F7FA"
+    android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarAlterStock"
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Add product"
-            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
-            app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationContentDescription="Close" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:background="#2E7D32"
+            app:title="Add / Edit Stock"
+            app:titleTextColor="#FFFFFF"
+            app:navigationIcon="@drawable/ic_arrow_back" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,165 +28,120 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Product name -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilProductName"
-                android:layout_width="match_parent"
+            <!-- Product Name -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Product Name *"
+                android:textStyle="bold"
+                android:textColor="#333333" />
+            <EditText
+                android:id="@+id/etProductName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@android:color/white"
+                android:hint="e.g. Tinned Tomatoes"
+                android:inputType="text"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:layout_marginBottom="12dp"
-                android:hint="Product name"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:elevation="1dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etProductName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:maxLines="1"
-                    tools:text="Brown Rice" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Quantity + Unit -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- Quantity -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:text="Quantity *"
+                android:textStyle="bold"
+                android:textColor="#333333" />
+            <EditText
+                android:id="@+id/etQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@android:color/white"
+                android:hint="e.g. 45"
+                android:inputType="numberDecimal"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:elevation="1dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilQuantity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:hint="Quantity"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etQuantity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberSigned"
-                        android:maxLines="1"
-                        tools:text="50" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilUnit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Unit"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/autoCompleteUnit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        tools:text="kg" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
+            <!-- Unit -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unit *"
+                android:textStyle="bold"
+                android:textColor="#333333" />
+            <Spinner
+                android:id="@+id/spinnerUnit"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@android:color/white"
+                android:layout_marginBottom="12dp"
+                android:elevation="1dp" />
 
             <!-- Category -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCategory"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Category *"
+                android:textStyle="bold"
+                android:textColor="#333333" />
+            <Spinner
+                android:id="@+id/spinnerCategory"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@android:color/white"
                 android:layout_marginBottom="12dp"
-                android:hint="Category"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                android:elevation="1dp" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteCategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    tools:text="Dry Goods" />
+            <!-- Expiry Date -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expiry Date"
+                android:textStyle="bold"
+                android:textColor="#333333" />
+            <Button
+                android:id="@+id/btnPickDate"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Select Date"
+                android:backgroundTint="#EEEEEE"
+                android:textColor="#333333"
+                android:layout_marginBottom="24dp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Expiry date -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilExpiryDate"
+            <TextView
+                android:id="@+id/tvSelectedDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:hint="Expiry date (optional)"
-                app:endIconMode="clear_text"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:text="No date selected"
+                android:textColor="#666666"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etExpiryDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:focusable="false"
-                    android:clickable="true"
-                    android:cursorVisible="false"
-                    tools:text="12 Dec 2025" />
+            <!-- Save button -->
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="Save Product"
+                android:backgroundTint="#2E7D32"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Upcoming donation info card — edit mode only -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardUpcomingDonation"
+            <!-- Error message -->
+            <TextView
+                android:id="@+id/tvError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:visibility="gone"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorPrimaryContainer"
-                app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                app:cardCornerRadius="12dp"
-                tools:visibility="gone">
-
-                <TextView
-                    android:id="@+id/textUpcomingDonation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="?attr/colorOnPrimaryContainer"
-                    tools:text="Upcoming donation: +20 kg" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="24dp" />
-
-            <!-- Save / Add button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSaveProduct"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Add product"
-                android:paddingTop="14dp"
-                android:paddingBottom="14dp"
-                style="@style/Widget.Material3.Button" />
-
-            <!-- Delete button — edit mode only -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnDeleteProduct"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:text="Delete product"
-                android:paddingTop="14dp"
-                android:paddingBottom="14dp"
-                android:visibility="gone"
-                style="@style/Widget.Material3.Button.TonalButton"
-                tools:visibility="gone" />
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:textColor="#C62828"
+                android:visibility="gone" />
 
         </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+</ScrollView>
