@@ -66,6 +66,7 @@ public class Maps extends AppCompatActivity {
         Button btnDirections = findViewById(R.id.btnDirections);
         btnDirections.setVisibility(View.GONE);
         btnDirections.setOnClickListener(v -> fetchAndDrawRoute(currentDestLat, currentDestLon));
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         setupFilterButtons();
         loadFoodBanksFromBackend();
