@@ -16,7 +16,22 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+import java.util.Map;
+
+
 public interface ApiService {
+
+    @GET("api/foodbanks/{fbId}/recent-activity")
+    Call<List<Map<String, Object>>> getRecentActivity(@Path("fbId") long fbId);
+
+    @GET("api/foodbanks/{fbId}/weekly-intake")
+    Call<List<Map<String, Object>>> getWeeklyIntake(@Path("fbId") long fbId);
+
+    @GET("api/foodbanks/{fbId}/families-served")
+    Call<Map<String, Object>> getFamiliesServed(@Path("fbId") long fbId);
+
+    @GET("api/foodbanks/{fbId}/allotment-breakdown")
+    Call<List<Map<String, Object>>> getAllotmentBreakdown(@Path("fbId") long fbId);
 
     // ── FoodBank auth ──────────────────────────────────────────────────────
     @POST("api/foodbanks/login")
