@@ -60,6 +60,8 @@ public class FB_Dashboard extends AppCompatActivity
             loadRecentActivity(fbId);
             loadWeeklyBarChart(fbId);
             loadFamiliesServed(fbId);
+            loadPendingDonations(fbId);
+            loadTotalReceived(fbId);
         }
     }
 
@@ -250,42 +252,58 @@ public class FB_Dashboard extends AppCompatActivity
     }
 
     private void loadMetricCards(long fbId) {
-        ApiClient.getApiService().getProducts(fbId)
-                .enqueue(new Callback<List<FoodBankProduct>>() {
-                    @Override
-                    public void onResponse(Call<List<FoodBankProduct>> call,
-                                           Response<List<FoodBankProduct>> response) {
-                        if (!response.isSuccessful() || response.body() == null) return;
-                        List<FoodBankProduct> products = response.body();
+        new Thread(() -> {
+            try {
+                java.net.URL url = new java.net.URL(
+                        "http://10.0.2.2:8080/api/donations/foodbank/" + fbId + "/active-allotments");
+                java.net.HttpURLConnection conn =
+                        (java.net.HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
 
-                        int totalUnits = 0;
-                        int upcomingCount = 0;
-                        for (FoodBankProduct p : products) {
-                            totalUnits += p.getProductQuant();
-                            if (p.getUpcomingDonation() > 0) upcomingCount++;
-                        }
+                if (conn.getResponseCode() != 200) return;
 
-                        final int finalTotal    = totalUnits;
-                        final int finalProducts = products.size();
-                        final int finalUpcoming = upcomingCount;
+                java.io.BufferedReader reader = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(conn.getInputStream()));
+                String response = reader.readLine();
+                reader.close();
 
-                        runOnUiThread(() -> {
-                            ((TextView) findViewById(R.id.tvTotalKg))
-                                    .setText(String.valueOf(finalTotal));
-                            ((TextView) findViewById(R.id.tvActiveAllotments))
-                                    .setText(String.valueOf(finalProducts));
-                            ((TextView) findViewById(R.id.tvPendingCount))
-                                    .setText(String.valueOf(finalUpcoming));
-                        });
-                    }
+                org.json.JSONObject json = new org.json.JSONObject(response);
+                int activeAllotments = json.getInt("count");
 
-                    @Override
-                    public void onFailure(Call<List<FoodBankProduct>> call, Throwable t) {
-                        Toast.makeText(FB_Dashboard.this,
-                                "Could not load data: " + t.getMessage(),
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
+                runOnUiThread(() ->
+                        ((TextView) findViewById(R.id.tvActiveAllotments))
+                                .setText(String.valueOf(activeAllotments)));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void loadPendingCount(long fbId) {
+        new Thread(() -> {
+            try {
+                java.net.URL url = new java.net.URL(
+                        "http://10.0.2.2:8080/api/donations/foodbank/" + fbId + "/pending-count");
+                java.net.HttpURLConnection conn =
+                        (java.net.HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                if (conn.getResponseCode() != 200) return;
+                java.io.BufferedReader reader = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(conn.getInputStream()));
+                String response = reader.readLine();
+                reader.close();
+                org.json.JSONObject json = new org.json.JSONObject(response);
+                long count = json.getLong("count");
+                runOnUiThread(() ->
+                        ((TextView) findViewById(R.id.tvPendingCount))
+                                .setText(String.valueOf(count)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void loadStockLevels(long fbId) {
@@ -441,6 +459,105 @@ public class FB_Dashboard extends AppCompatActivity
                     @Override
                     public void onFailure(Call<Map<String, Object>> call, Throwable t) {}
                 });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        long fbId = session.getFbId();
+        if (fbId != -1L) {
+            loadMetricCards(fbId);
+            loadStockLevels(fbId);
+            loadPieChart(fbId);
+            loadWeeklyBarChart(fbId);
+            loadFamiliesServed(fbId);
+            loadPendingCount(fbId);
+            loadPendingDonations(fbId);
+            loadTotalReceived(fbId);
+        }
+    }
+
+    private void loadTotalReceived(long fbId) {
+        new Thread(() -> {
+            try {
+                java.net.URL url = new java.net.URL(
+                        "http://10.0.2.2:8080/api/donations/foodbank/" + fbId + "/total-received");
+                java.net.HttpURLConnection conn =
+                        (java.net.HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+
+                if (conn.getResponseCode() != 200) return;
+
+                java.io.BufferedReader reader = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(conn.getInputStream()));
+                String response = reader.readLine();
+                reader.close();
+
+                org.json.JSONObject json = new org.json.JSONObject(response);
+                double total = json.getDouble("totalKg");
+
+                runOnUiThread(() ->
+                        ((TextView) findViewById(R.id.tvTotalKg))
+                                .setText(String.format("%.0f", total)));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void loadPendingDonations(long fbId) {
+        new Thread(() -> {
+            try {
+                java.net.URL url = new java.net.URL(
+                        "http://10.0.2.2:8080/api/donations/foodbank/" + fbId);
+                java.net.HttpURLConnection conn =
+                        (java.net.HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+
+                if (conn.getResponseCode() != 200) return;
+
+                java.io.BufferedReader reader = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                reader.close();
+
+                org.json.JSONArray array = new org.json.JSONArray(sb.toString());
+                List<Donation> pending = new ArrayList<>();
+
+                for (int i = 0; i < array.length(); i++) {
+                    org.json.JSONObject obj = array.getJSONObject(i);
+                    String status = obj.optString("status", "");
+                    // Only show Pending and Confirmed on dashboard
+                    if (!status.equals("Pending") && !status.equals("Confirmed")) continue;
+                    pending.add(new Donation(
+                            obj.getInt("donation_id"),
+                            obj.optString("prod_name", "Unknown"),
+                            obj.optString("items", ""),
+                            (int) obj.optDouble("weight_kg", 0),
+                            0f,
+                            status,
+                            obj.optString("created_at", ""),
+                            obj.optString("note", ""),
+                            obj.optString("food_type", "")
+                    ));
+                }
+
+                runOnUiThread(() -> {
+                    RecyclerView rv = findViewById(R.id.rvPendingDonations);
+                    rv.setLayoutManager(new LinearLayoutManager(FB_Dashboard.this));
+                    rv.setAdapter(new DonationAdapter(FB_Dashboard.this,
+                            pending, FB_Dashboard.this));
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     // DonationAdapter.OnDonationActionListener — dashboard shows read-only

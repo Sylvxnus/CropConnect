@@ -18,6 +18,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.cropconnect.activities.foodbank.ViewStock;
 
 public class FoodBankDonationsActivity extends AppCompatActivity
         implements DonationAdapter.OnDonationActionListener {
@@ -77,6 +78,10 @@ public class FoodBankDonationsActivity extends AppCompatActivity
             if (id == R.id.nav_dashboard) {
                 startActivity(new android.content.Intent(this, FB_Dashboard.class));
                 return true;
+            }
+            if (id == R.id.nav_stock) {                          // ← add this
+                startActivity(new Intent(this, ViewStock.class)); // ← add this
+                return true;                                      // ← add this
             }
             return id == R.id.nav_donations;
         });
