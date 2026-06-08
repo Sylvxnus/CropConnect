@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cropconnect.R;
 import com.example.cropconnect.adapters.DonationAdapter;
 import com.example.cropconnect.models.Donation;
+import com.example.cropconnect.utils.SessionManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -25,6 +26,7 @@ public class FoodBankDonationsActivity extends AppCompatActivity
     private TextView tvResultCount;
     private String currentStatus = "all";
     private String currentSearch = "";
+    private RecyclerView rvDonations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +36,10 @@ public class FoodBankDonationsActivity extends AppCompatActivity
         tvResultCount = findViewById(R.id.tvResultCount);
         RecyclerView rv = findViewById(R.id.rvDonations);
 
-        // Build sample data — replace with your real DB/API calls
-        List<Donation> donations = getSampleDonations();
-
-        adapter = new DonationAdapter(this, donations, this);
+        rvDonations = rv;
+        adapter = new DonationAdapter(this, new ArrayList<>(), this);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
-        updateCount();
 
         // Search
         EditText searchBar = findViewById(R.id.searchBar);
@@ -90,23 +89,114 @@ public class FoodBankDonationsActivity extends AppCompatActivity
 
     @Override
     public void onConfirm(Donation donation) {
-        // TODO: update donation status in the database/API
-        // Then refresh the list
+        updateDonationStatus(donation, "Confirmed");
     }
 
     @Override
     public void onMarkCollected(Donation donation) {
-        // TODO: update donation status in the database/API
+        updateDonationStatus(donation, "Collected");
     }
 
     @Override
     public void onViewAllotment(Donation donation) {
-        // TODO: navigate to allotment detail screen
+        // Optional: navigate to allotment detail screen
     }
 
-    /*public void DonationsPageButton(View view) {
-        startActivity(new Intent(CurrentActivity.this, DonationsPageButton.class));
-    }*/
+    private void loadDonations(long fbId) {
+        new Thread(() -> {
+            try {
+                java.net.URL url = new java.net.URL(
+                        "http://10.0.2.2:8080/api/donations/foodbank/" + fbId);
+                java.net.HttpURLConnection conn =
+                        (java.net.HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+
+                if (conn.getResponseCode() != 200) return;
+
+                java.io.BufferedReader reader = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                reader.close();
+
+                org.json.JSONArray array = new org.json.JSONArray(sb.toString());
+                List<Donation> donations = new ArrayList<>();
+                for (int i = 0; i < array.length(); i++) {
+                    org.json.JSONObject obj = array.getJSONObject(i);
+                    donations.add(new Donation(
+                            obj.getInt("donation_id"),
+                            obj.optString("prod_name", "Unknown"),
+                            obj.optString("items", ""),
+                            (int) obj.optDouble("weight_kg", 0),
+                            0f,
+                            obj.optString("status", "Pending"),
+                            obj.optString("created_at", ""),
+                            obj.optString("note", ""),
+                            obj.optString("food_type", "")
+                    ));
+                }
+
+                runOnUiThread(() -> {
+                    adapter.setDonations(donations);
+                    updateCount();
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SessionManager session = new SessionManager(this);
+        long fbId = session.getFbId();
+        if (fbId != -1L) loadDonations(fbId);
+    }
+
+    private void updateDonationStatus(Donation donation, String newStatus) {
+        new Thread(() -> {
+            try {
+                java.net.URL url = new java.net.URL(
+                        "http://10.0.2.2:8080/api/donations/" + donation.getId() + "/status");
+                java.net.HttpURLConnection conn =
+                        (java.net.HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("PATCH");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setDoOutput(true);
+                conn.setConnectTimeout(5000);
+
+                String body = "{\"status\":\"" + newStatus + "\"}";
+                conn.getOutputStream().write(body.getBytes());
+                conn.getOutputStream().close();
+
+                int code = conn.getResponseCode();
+
+                runOnUiThread(() -> {
+                    if (code == 200) {
+                        // Update the donation status locally and refresh the list
+                        donation.setStatus(newStatus);
+                        adapter.notifyDataSetChanged();
+                        android.widget.Toast.makeText(this,
+                                "Marked as " + newStatus,
+                                android.widget.Toast.LENGTH_SHORT).show();
+                    } else {
+                        android.widget.Toast.makeText(this,
+                                "Update failed (" + code + ")",
+                                android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (Exception e) {
+                runOnUiThread(() -> android.widget.Toast.makeText(this,
+                        "Connection failed: " + e.getMessage(),
+                        android.widget.Toast.LENGTH_LONG).show());
+            }
+        }).start();
+    }
 
     private List<Donation> getSampleDonations() {
         List<Donation> list = new ArrayList<>();

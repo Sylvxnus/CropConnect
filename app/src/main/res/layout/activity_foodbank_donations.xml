@@ -16,12 +16,15 @@
         xmlns:app="http://schemas.android.com/apk/res-auto" />
 
     <!-- Search bar -->
-    <com.google.android.material.search.SearchBar
+    <EditText
         android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:hint="Search allotment or item..." />
+        android:padding="12dp"
+        android:hint="Search allotment or item..."
+        android:inputType="text"
+        android:background="@drawable/badge_confirmed" />
 
     <!-- Status filter chips -->
     <HorizontalScrollView
