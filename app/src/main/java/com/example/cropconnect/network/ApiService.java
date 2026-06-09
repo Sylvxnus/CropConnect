@@ -51,6 +51,12 @@ public interface ApiService {
     @POST("api/producers/login")
     Call<Producer> loginProducer(@Body Producer loginRequest);
 
+    @PUT("api/producers/{id}")
+    Call<Producer> updateProducer(@Path("id") long id, @Body Producer producer);
+
+    @DELETE("api/producers/{id}")
+    Call<Void> deleteProducer(@Path("id") long id);
+
     // ── Products ───────────────────────────────────────────────────────────
     @GET("api/products")
     Call<List<FoodBankProduct>> getProducts(@Query("fbId") long fbId);

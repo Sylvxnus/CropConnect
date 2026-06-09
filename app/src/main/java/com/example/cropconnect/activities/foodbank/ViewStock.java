@@ -23,6 +23,7 @@ import com.example.cropconnect.models.FoodBankProduct;
 import com.example.cropconnect.network.ApiClient;
 import com.example.cropconnect.network.ApiService;
 import com.example.cropconnect.utils.SessionManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +49,11 @@ public class ViewStock extends AppCompatActivity implements StockAdapter.OnProdu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.foodbank_view_stock);
 
+        // Toolbar — no back button, this is a top-level nav destination
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> finish());
 
+        // Get logged-in foodbank ID from session
         SessionManager session = new SessionManager(this);
         fbId = session.getFbId();
         if (fbId == -1L) {
@@ -61,16 +62,19 @@ public class ViewStock extends AppCompatActivity implements StockAdapter.OnProdu
             return;
         }
 
+        // Bind views
         recyclerStock = findViewById(R.id.recyclerStock);
         progressBar   = findViewById(R.id.progressBar);
         tvEmpty       = findViewById(R.id.tvEmpty);
         etSearch      = findViewById(R.id.etSearch);
         Button btnAdd = findViewById(R.id.btnAddProduct);
 
+        // Set up RecyclerView
         adapter = new StockAdapter(new ArrayList<>(), this);
         recyclerStock.setLayoutManager(new LinearLayoutManager(this));
         recyclerStock.setAdapter(adapter);
 
+        // Live search filter
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -80,19 +84,46 @@ public class ViewStock extends AppCompatActivity implements StockAdapter.OnProdu
             @Override public void afterTextChanged(Editable s) {}
         });
 
+        // Add product → open AlterStock in create mode
         btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(ViewStock.this, AlterStock.class);
             intent.putExtra("fb_id", fbId);
             startActivity(intent);
         });
 
+        // ── Bottom navigation ─────────────────────────────────────────
+        setupBottomNav();
+
         apiService = ApiClient.getApiService();
         loadProducts();
+    }
+
+    private void setupBottomNav() {
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        // Mark Stock as the selected tab
+        bottomNav.setSelectedItemId(R.id.nav_stock);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_dashboard) {
+                // Navigate back to dashboard — clear stack so back button doesn't loop
+                Intent intent = new Intent(this, FB_Dashboard.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                return true;
+            }
+            if (id == R.id.nav_donations) {
+                startActivity(new Intent(this, FoodBankDonationsActivity.class));
+                return true;
+            }
+            // nav_stock — already here, do nothing
+            return id == R.id.nav_stock;
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // Refresh list when returning from AlterStock
         loadProducts();
     }
 
@@ -122,8 +153,8 @@ public class ViewStock extends AppCompatActivity implements StockAdapter.OnProdu
         });
     }
 
-    // ── StockAdapter.OnProductClickListener ───────────────────────────────
-    // Tap a product card → show Edit / Delete dialog
+    // ── StockAdapter.OnProductClickListener ───────────────────────────
+    // Tap a product card → show Edit / Delete options
     @Override
     public void onProductClick(FoodBankProduct product) {
         new AlertDialog.Builder(this)

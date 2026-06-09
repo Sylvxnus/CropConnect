@@ -63,6 +63,9 @@
             android:exported="false"/>
         <activity android:name=".activities.producer.ProcessCredits"
             android:exported="false"/>
+        <activity android:name=".activities.producer.ProducerSettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.producer.PROD_Dashboard"/>
 
         <!-- Food Bank -->
         <activity android:name=".activities.foodbank.FB_Dashboard"

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA"
+    android:background="?attr/colorSurface"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -11,15 +11,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <!-- Toolbar -->
+        <!-- Toolbar — uses theme primary colour (purple) -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#2E7D32"
+            android:background="?attr/colorPrimary"
             app:title="Add / Edit Stock"
-            app:titleTextColor="#FFFFFF"
+            app:titleTextColor="?attr/colorOnPrimary"
             app:navigationIcon="@drawable/ic_arrow_back" />
 
         <LinearLayout
@@ -34,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="Product Name *"
                 android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textColor="?attr/colorOnSurface" />
             <EditText
                 android:id="@+id/etProductName"
                 android:layout_width="match_parent"
@@ -53,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="Quantity *"
                 android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textColor="?attr/colorOnSurface" />
             <EditText
                 android:id="@+id/etQuantity"
                 android:layout_width="match_parent"
@@ -72,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:text="Unit *"
                 android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textColor="?attr/colorOnSurface" />
             <Spinner
                 android:id="@+id/spinnerUnit"
                 android:layout_width="match_parent"
@@ -87,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:text="Category *"
                 android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textColor="?attr/colorOnSurface" />
             <Spinner
                 android:id="@+id/spinnerCategory"
                 android:layout_width="match_parent"
@@ -102,34 +101,35 @@
                 android:layout_height="wrap_content"
                 android:text="Expiry Date"
                 android:textStyle="bold"
-                android:textColor="#333333" />
-            <Button
+                android:textColor="?attr/colorOnSurface" />
+
+            <!-- Date picker button — tonal style matches login screen secondary actions -->
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPickDate"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Select Date"
-                android:backgroundTint="#EEEEEE"
-                android:textColor="#333333"
-                android:layout_marginBottom="24dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Select Date" />
 
             <TextView
                 android:id="@+id/tvSelectedDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="No date selected"
-                android:textColor="#666666"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:gravity="center"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="24dp" />
 
-            <!-- Save button -->
-            <Button
+            <!-- Save button — filled primary (purple) -->
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
                 android:text="Save Product"
-                android:backgroundTint="#2E7D32"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <!-- Error message -->
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_marginTop="8dp"
-                android:textColor="#C62828"
+                android:textColor="?attr/colorError"
                 android:visibility="gone" />
 
         </LinearLayout>
