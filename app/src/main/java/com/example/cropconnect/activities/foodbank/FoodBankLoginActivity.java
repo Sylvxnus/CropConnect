@@ -28,6 +28,10 @@ public class FoodBankLoginActivity extends AppCompatActivity {
     private MaterialButton btnLogin;
     private TextView textLoginError;
 
+    private static final int MIN_PASSWORD_LEN = 8;
+    private int loginAttempts = 0;
+    private static final int MAX_ATTEMPTS = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,18 +60,43 @@ public class FoodBankLoginActivity extends AppCompatActivity {
         String email    = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
         String password = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
 
+        //Email Validation
         if (email.isEmpty()) {
             tilEmail.setError("Email is required");
             valid = false;
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        }
+        else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             tilEmail.setError("Enter a valid email");
             valid = false;
-        } else { tilEmail.setError(null); }
+        }
+        else {
+            tilEmail.setError(null);
+        }
 
+        //Password Validation
         if (password.isEmpty()) {
             tilPassword.setError("Password is required");
             valid = false;
-        } else { tilPassword.setError(null); }
+        }
+        else if (password.length() < MIN_PASSWORD_LEN) {
+            tilPassword.setError("Password must be at least 8 characters");
+            valid = false;
+        }
+        else if (!password.matches(".*[A-Z].*")){
+            tilPassword.setError("Password must contain at least one uppercase letter");
+            valid = false;
+        }
+        else if (!password.matches(".*[0-9].*")){
+            tilPassword.setError("Password must contain at least one number");
+            valid = false;
+        }
+        else if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) {
+            tilPassword.setError("Password must contain at least one special character");
+            valid = false;
+        }
+
+        else {
+            tilPassword.setError(null); }
 
         return valid;
     }
@@ -75,6 +104,11 @@ public class FoodBankLoginActivity extends AppCompatActivity {
     // takes the login form inputs and creates a new foodbank object, then sends the new food bank
     // to the backend to be validated
     private void loginFoodBank() {
+        if (loginAttempts >= MAX_ATTEMPTS) {
+            showError("Too many failed attempts. Please try again later.");
+            btnLogin.setEnabled(false);
+            return;
+        }
         String email    = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
@@ -94,7 +128,8 @@ public class FoodBankLoginActivity extends AppCompatActivity {
                             FoodBankLoginActivity.this, response.body());
                     navigateToDashboard();
                 } else {
-                    showError("Invalid email or password");
+                    loginAttempts++;
+                    showError("Invalid email or password. Attempt " + loginAttempts + "/" + MAX_ATTEMPTS);
                 }
             }
 

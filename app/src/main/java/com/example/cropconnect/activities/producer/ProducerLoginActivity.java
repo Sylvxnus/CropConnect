@@ -27,6 +27,10 @@ public class ProducerLoginActivity extends AppCompatActivity {
     private MaterialButton btnLogin;
     private TextView textLoginError;
 
+
+    private int loginAttempts = 0;
+    private static final int MAX_ATTEMPTS = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +76,12 @@ public class ProducerLoginActivity extends AppCompatActivity {
     }
 
     private void loginProducer() {
+
+        if (loginAttempts >= MAX_ATTEMPTS) {
+            showError("Too many failed attempts. Please try again later.");
+            btnLogin.setEnabled(false);
+            return;
+        }
         String email    = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
@@ -90,8 +100,10 @@ public class ProducerLoginActivity extends AppCompatActivity {
                     SessionManager.saveProducerSession(
                             ProducerLoginActivity.this, response.body());
                     navigateToDashboard();
-                } else {
-                    showError("Invalid email or password");
+                }
+                else {
+                    loginAttempts++;
+                    showError("Invalid email or password. Attempt " + loginAttempts + "/" + MAX_ATTEMPTS);
                 }
             }
 

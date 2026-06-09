@@ -55,4 +55,6 @@ dependencies {
 
     // Used for displaying and making charts
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    testImplementation("junit:junit:4.13.2")
 }

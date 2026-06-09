@@ -74,15 +74,22 @@ public class ProducerRegisterActivity extends AppCompatActivity {
             tilEmail.setError("Enter a valid email"); valid = false; }
         else tilEmail.setError(null);
 
-        if (postcode.isEmpty()) { tilPostcode.setError("Postcode is required"); valid = false; }
-        else if (postcode.length() < 5 || postcode.length() > 8) {
+        if (!postcode.matches("^[A-Z]{1,2}[0-9][0-9A-Z]?\\s?[0-9][A-Z]{2}$")) {
             tilPostcode.setError("Enter a valid UK postcode"); valid = false; }
         else tilPostcode.setError(null);
 
-        if (password.isEmpty()) { tilPassword.setError("Password is required"); valid = false; }
-        else if (password.length() < 6) {
-            tilPassword.setError("At least 6 characters"); valid = false; }
-        else tilPassword.setError(null);
+        if (password.isEmpty()) {
+            tilPassword.setError("Password is required"); valid = false;
+        } else if (password.length() < 8) {
+            tilPassword.setError("Password must be at least 8 characters"); valid = false;
+        } else if (!password.matches(".*[A-Z].*")) {
+            tilPassword.setError("Password must contain at least one uppercase letter"); valid = false;
+        } else if (!password.matches(".*[0-9].*")) {
+            tilPassword.setError("Password must contain at least one number"); valid = false;
+        } else if (!password.matches(".*[!@#$%^&*()_+=|<>?{}\\[\\]~-].*")) {
+            tilPassword.setError("Password must contain at least one special character"); valid = false;
+        } else tilPassword.setError(null);
+
 
         if (confirm.isEmpty()) { tilConfirmPassword.setError("Please confirm your password"); valid = false; }
         else if (!confirm.equals(password)) {
