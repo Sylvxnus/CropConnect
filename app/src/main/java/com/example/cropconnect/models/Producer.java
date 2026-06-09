@@ -10,11 +10,16 @@ import com.google.gson.annotations.SerializedName;
  *
  * Table columns:
  *   prod_id, prod_name, prod_email, prod_password, prod_postcode
+ *
+ * Note: prodId is Integer (nullable) not int (primitive) so that Gson
+ * omits it from the JSON body on registration. Sending prodId=0 causes
+ * Hibernate to attempt a merge on id=0 instead of an insert, throwing
+ * ObjectOptimisticLockingFailureException.
  */
 public class Producer {
 
     @SerializedName("prod_id")
-    private int prodId;
+    private Integer prodId;   // Integer not int — null = new record, omitted from JSON
 
     @SerializedName("prod_name")
     private String prodName;
@@ -41,14 +46,14 @@ public class Producer {
     }
 
     // ── Getters ────────────────────────────────────────────────────────────
-    public int getProdId()          { return prodId; }
-    public String getProdName()     { return prodName; }
-    public String getProdEmail()    { return prodEmail; }
-    public String getProdPassword() { return prodPassword; }
-    public String getProdPostcode() { return prodPostcode; }
+    public Integer getProdId()          { return prodId; }
+    public String getProdName()         { return prodName; }
+    public String getProdEmail()        { return prodEmail; }
+    public String getProdPassword()     { return prodPassword; }
+    public String getProdPostcode()     { return prodPostcode; }
 
     // ── Setters ────────────────────────────────────────────────────────────
-    public void setProdId(int prodId)             { this.prodId = prodId; }
+    public void setProdId(Integer prodId)         { this.prodId = prodId; }
     public void setProdName(String prodName)      { this.prodName = prodName; }
     public void setProdEmail(String prodEmail)    { this.prodEmail = prodEmail; }
     public void setProdPassword(String p)         { this.prodPassword = p; }

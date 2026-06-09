@@ -98,8 +98,10 @@ public class SessionManager {
 
     // ── Producer instance methods ──────────────────────────────────────────
 
-    public void saveProducerSession(int prodId, String prodName, String prodEmail) {
-        editor.putInt(KEY_PROD_ID, prodId);
+    // Integer (nullable) matches Producer.getProdId() return type — guards
+    // against NPE if the server response omits prod_id on registration
+    public void saveProducerSession(Integer prodId, String prodName, String prodEmail) {
+        editor.putInt(KEY_PROD_ID, prodId != null ? prodId : -1);
         editor.putString(KEY_PROD_NAME,  prodName  != null ? prodName  : "");
         editor.putString(KEY_PROD_EMAIL, prodEmail != null ? prodEmail : "");
         editor.putString(KEY_USER_TYPE, "producer");
