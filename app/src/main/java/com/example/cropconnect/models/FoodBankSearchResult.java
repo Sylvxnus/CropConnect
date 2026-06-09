@@ -1,5 +1,6 @@
 package com.example.cropconnect.models;
 
+// class for foodbank search results (searching for specific fb or prod with relevant getters and setters
 public class FoodBankSearchResult {
     private FoodBank foodBank;
     private String matchedProduct;

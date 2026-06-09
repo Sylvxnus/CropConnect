@@ -2,6 +2,7 @@ package com.example.cropconnect.models;
 
 import com.google.gson.annotations.SerializedName;
 
+// class for foodbank products with relevant getters and setters
 public class FoodBankProduct {
 
     // Long (nullable) not long (primitive) — so new products send null not 0

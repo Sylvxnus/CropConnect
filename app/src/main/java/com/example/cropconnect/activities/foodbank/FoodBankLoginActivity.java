@@ -50,7 +50,7 @@ public class FoodBankLoginActivity extends AppCompatActivity {
             if (validateForm()) loginFoodBank();
         });
     }
-
+    //Checks for empty or invalid data entered into the login page
     private boolean validateForm() {
         boolean valid = true;
         String email    = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
@@ -72,6 +72,8 @@ public class FoodBankLoginActivity extends AppCompatActivity {
         return valid;
     }
 
+    // takes the login form inputs and creates a new foodbank object, then sends the new food bank
+    // to the backend to be validated
     private void loginFoodBank() {
         String email    = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
@@ -104,6 +106,7 @@ public class FoodBankLoginActivity extends AppCompatActivity {
         });
     }
 
+    //after logging in navigates the user to the dashboard
     private void navigateToDashboard() {
         Intent intent = new Intent(this, FB_Dashboard.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -108,6 +108,7 @@ public class AlterStock extends AppCompatActivity {
         apiService = ApiClient.getApiService();
     }
 
+    // allows the user to select a date on the calendar
     private void showDatePicker() {
         Calendar c = Calendar.getInstance();
         new DatePickerDialog(this, (view, year, month, day) -> {
@@ -116,6 +117,7 @@ public class AlterStock extends AppCompatActivity {
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    //saves
     private void saveProduct() {
         String name  = etProductName.getText().toString().trim();
         String quantStr = etQuantity.getText().toString().trim();

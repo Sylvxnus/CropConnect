@@ -2,6 +2,7 @@ package com.example.cropconnect.models;
 
 import com.google.gson.annotations.SerializedName;
 
+// class for foodbanks with relevant getters and setters
 public class FoodBank {
 
     @SerializedName("fbId")
