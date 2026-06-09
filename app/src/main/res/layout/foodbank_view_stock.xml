@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F7FA"
+    android:background="?attr/colorSurface"
     android:fitsSystemWindows="true">
 
-    <!-- Toolbar -->
+    <!-- Toolbar — uses theme primary colour (purple) -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#2E7D32"
+        android:background="?attr/colorPrimary"
         app:title="Stock Inventory"
-        app:titleTextColor="#FFFFFF" />
+        app:titleTextColor="?attr/colorOnPrimary" />
 
     <!-- Search bar -->
     <EditText
@@ -32,17 +32,16 @@
         android:singleLine="true"
         android:elevation="2dp" />
 
-    <!-- Add product button -->
-    <Button
+    <!-- Add product button — uses Material3 filled button style (purple) -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddProduct"
+        style="@style/Widget.Material3.Button"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="#2E7D32"
         android:text="+ Add New Product"
-        android:textColor="#FFFFFF"
         android:textStyle="bold" />
 
     <!-- Loading indicator -->
@@ -61,7 +60,7 @@
         android:gravity="center"
         android:padding="32dp"
         android:text="No stock items found."
-        android:textColor="#888888"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="16sp"
         android:visibility="gone" />
 
@@ -74,5 +73,13 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:clipToPadding="false" />
+
+    <!-- Bottom navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        app:menu="@menu/foodbank_bottom_nav" />
 
 </LinearLayout>

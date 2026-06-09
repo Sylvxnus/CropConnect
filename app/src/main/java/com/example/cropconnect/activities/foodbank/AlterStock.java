@@ -187,7 +187,6 @@ public class AlterStock extends AppCompatActivity {
         tvError.setText(msg);
         tvError.setVisibility(View.VISIBLE);
     }
-
     private void setSpinnerValue(Spinner spinner, String[] values, String target) {
         if (target == null) return;
         for (int i = 0; i < values.length; i++) {
