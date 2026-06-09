@@ -204,7 +204,6 @@ public class ProcessDonations extends AppCompatActivity {
     }
 
     private void submitDonation() {
-        // Validate
         String items      = etItems.getText() != null
                 ? etItems.getText().toString().trim() : "";
         String weightStr  = etWeight.getText() != null
@@ -216,14 +215,17 @@ public class ProcessDonations extends AppCompatActivity {
         String foodType   = spinnerFoodType.getSelectedItem().toString();
 
         if (items.isEmpty()) { showError("Please enter the items you are donating."); return; }
+        if (items.length() > 100) { showError("Item description must be under 100 characters."); return; }
         if (weightStr.isEmpty()) { showError("Please enter the estimated weight."); return; }
         if (selectedDate == null) { showError("Please select a best before date."); return; }
         if (storageReq.isEmpty()) { showError("Please enter storage requirements."); return; }
+        if (storageReq.length() > 200) { showError("Storage requirements must be under 200 characters."); return; }
 
         double weight;
         try {
             weight = Double.parseDouble(weightStr);
             if (weight <= 0) { showError("Weight must be greater than 0."); return; }
+            if (weight > 500) { showError("Weight cannot exceed 500kg."); return; }
         } catch (NumberFormatException e) {
             showError("Please enter a valid weight.");
             return;
@@ -234,12 +236,12 @@ public class ProcessDonations extends AppCompatActivity {
 
         long prodId = session.getProdId();
         long fbId   = selectedFoodBank.getFbId();
-        final double finalWeight = weight;
-        final String finalItems  = items;
+        final double finalWeight  = weight;
+        final String finalItems   = items;
         final String finalStorage = storageReq;
-        final String finalNote   = note;
-        final String finalType   = foodType;
-        final String finalDate   = selectedDate;
+        final String finalNote    = note;
+        final String finalType    = foodType;
+        final String finalDate    = selectedDate;
 
         new Thread(() -> {
             try {
@@ -274,7 +276,6 @@ public class ProcessDonations extends AppCompatActivity {
                         Toast.makeText(this,
                                 "Donation submitted! The food bank will confirm shortly.",
                                 Toast.LENGTH_LONG).show();
-                        // Clear form and go back to food bank list
                         etItems.setText("");
                         etWeight.setText("");
                         etStorageReq.setText("");

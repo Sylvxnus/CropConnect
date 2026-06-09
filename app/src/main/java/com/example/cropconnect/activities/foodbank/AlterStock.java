@@ -122,18 +122,21 @@ public class AlterStock extends AppCompatActivity {
         String name  = etProductName.getText().toString().trim();
         String quantStr = etQuantity.getText().toString().trim();
 
-        // Validation
         if (name.isEmpty()) { showError("Product name is required."); return; }
+        if (name.length() > 100) { showError("Product name must be under 100 characters."); return; }
         if (quantStr.isEmpty()) { showError("Quantity is required."); return; }
 
         int quant;
         try {
             quant = Integer.parseInt(quantStr);
             if (quant < 0) { showError("Quantity cannot be negative."); return; }
+            if (quant > 10000) { showError("Quantity cannot exceed 10,000."); return; }
         } catch (NumberFormatException e) {
             showError("Enter a valid whole number for quantity.");
             return;
         }
+
+        if (selectedDate == null) { showError("Please select an expiry date."); return; }
 
         FoodBankProduct product = new FoodBankProduct();
         product.setFbId(fbId);
