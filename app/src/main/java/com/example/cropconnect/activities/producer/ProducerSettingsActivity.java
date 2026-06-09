@@ -46,6 +46,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
 
     private SessionManager session;
 
+    /** Initialises the settings screen, binds views, applies insets, and pre-fills fields from the session. */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         setupBottomNav();
     }
 
+    /** Binds all UI elements from the layout to their corresponding member variables. */
     private void bindViews() {
         tilName           = findViewById(R.id.tilName);
         tilEmail          = findViewById(R.id.tilEmail);
@@ -72,11 +74,13 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         textSettingsError = findViewById(R.id.textSettingsError);
     }
 
+    /** Pre-fills the name and email fields with values stored in the current session. */
     private void prefillFromSession() {
         etName.setText(session.getProdName());
         etEmail.setText(session.getProdEmail());
     }
 
+    /** Attaches click listeners to the back, save, log out, and delete account buttons. */
     private void setupButtons() {
         btnBack.setOnClickListener(v -> finish());
         btnSave.setOnClickListener(v -> { if (validateForm()) saveChanges(); });
@@ -84,6 +88,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         btnDeleteAccount.setOnClickListener(v -> confirmDeleteAccount());
     }
 
+    /** Configures the bottom navigation bar, highlighting Settings and wiring Dashboard and Donate navigation. */
     private void setupBottomNav() {
         BottomNavigationView nav = findViewById(R.id.bottomNav);
         nav.setSelectedItemId(R.id.nav_settings);
@@ -103,7 +108,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         });
     }
 
-
+    /** Applies top padding for the status bar to prevent UI overlap on Android 15 edge-to-edge mode. */
     private void applyWindowInsets() {
         View root = findViewById(R.id.settingsRoot);
         final int left   = root.getPaddingLeft();
@@ -117,6 +122,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         });
     }
 
+    /** Validates that name is non-empty and email is non-empty and well-formed. Returns true if valid. */
     private boolean validateForm() {
         boolean valid = true;
         String name  = etName.getText()  != null ? etName.getText().toString().trim()  : "";
@@ -138,6 +144,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         return valid;
     }
 
+    /** Sends a PUT request to update the producer's name and email, then refreshes the cached session on success. */
     private void saveChanges() {
         final String name  = etName.getText().toString().trim();
         final String email = etEmail.getText().toString().trim();
@@ -176,6 +183,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         });
     }
 
+    /** Displays a confirmation dialog before permanently deleting the producer's account. */
     private void confirmDeleteAccount() {
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Delete account?")
@@ -185,6 +193,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
                 .show();
     }
 
+    /** Sends a DELETE request to remove the producer's account, clears the session, and returns to the main screen. */
     private void deleteAccount() {
         final int prodId = session.getProdId();
 
@@ -217,6 +226,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         });
     }
 
+    /** Clears the current session and redirects to the main login screen, clearing the back stack. */
     private void logout() {
         session.clearSession();
         Intent intent = new Intent(this, MainActivity.class);
@@ -225,6 +235,7 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         finish();
     }
 
+    /** Displays an error message below the save button. */
     private void showError(String message) {
         textSettingsError.setText(message);
         textSettingsError.setVisibility(View.VISIBLE);
