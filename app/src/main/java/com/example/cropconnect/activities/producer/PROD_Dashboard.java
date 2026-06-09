@@ -36,7 +36,6 @@ public class PROD_Dashboard extends AppCompatActivity {
 
         session = new SessionManager(this);
         prodId  = session.getProdId();
-        android.widget.Toast.makeText(this, "prodId: " + prodId, android.widget.Toast.LENGTH_LONG).show();
 
 
         setupHeader();
@@ -459,17 +458,14 @@ public class PROD_Dashboard extends AppCompatActivity {
         nav.setSelectedItemId(R.id.nav_dashboard);
         nav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.nav_donations) {
-                // TODO: navigate to producer donations screen
-                return true;
-            } else if (id == R.id.nav_produce) {
-                // TODO: navigate to produce listing screen
-                return true;
-            } else if (id == R.id.nav_settings) {
-                // TODO: navigate to settings screen
+            if (id == R.id.nav_donate) {
+                startActivity(new android.content.Intent(this, ProcessDonations.class));
                 return true;
             }
-            return true;
+            if (id == R.id.nav_settings) {
+                return true; //placeholder currently
+            }
+            return id == R.id.nav_dashboard;
         });
     }
 

@@ -71,7 +71,7 @@
             android:exported="false"/>
         <activity android:name=".activities.foodbank.FoodBankDonationsActivity"
             android:exported="false"/>
-        <activity android:name=".activities.foodbank.ProcessDonations"
+        <activity android:name=".activities.foodbank.FoodBankProcessDonations"
             android:exported="false"/>
         <activity android:name=".activities.foodbank.ViewStock"
             android:exported="false"
