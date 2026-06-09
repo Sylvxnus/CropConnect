@@ -311,6 +311,11 @@ public class ProcessDonations extends AppCompatActivity {
                 finish();
                 return true;
             }
+            if (id == R.id.nav_settings) {
+                startActivity(new android.content.Intent(this, ProducerSettingsActivity.class));
+                finish();
+                return true;
+            }
             return id == R.id.nav_donate;
         });
     }

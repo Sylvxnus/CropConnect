@@ -463,7 +463,8 @@ public class PROD_Dashboard extends AppCompatActivity {
                 return true;
             }
             if (id == R.id.nav_settings) {
-                return true; //placeholder currently
+                startActivity(new android.content.Intent(this, ProducerSettingsActivity.class));
+                return true;
             }
             return id == R.id.nav_dashboard;
         });
