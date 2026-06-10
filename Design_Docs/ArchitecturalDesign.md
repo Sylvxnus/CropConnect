@@ -2,16 +2,15 @@
 
 ## System Overview
 
-The proposed system is a mobile application designed to support the redistribution of surplus allotment produce and improve access to local food support services. The platform aims to connect growers with community organisations, food banks and volunteers, helping to reduce food waste while improving food accessibility within the local community.
+The proposed system is a mobile application designed to support the redistribution of surplus allotment produce and improve access to local food support services. The platform connects producers with local food banks, helping to reduce food waste while improving food accessibility within the local community.
 
-The primary users of the system are recipients, growers, volunteers, and administrators.
+The primary users of the system are guest users, producers, and food banks.
 
-- **Recipients** can search for available produce, submit requests, and locate nearby food banks.
-- **Growers** can create and manage surplus produce listings.
-- **Volunteers** can assist with collection and delivery activities.
-- **Administrators** are responsible for overseeing platform activity, managing listings, and maintaining the integrity of the system.
+- **Guest users** can search for nearby food banks, view food bank details, and use the map to locate support services.
+- **Producers** can register, log in, view their dashboard, submit surplus produce donations, view credits, and access weather-based growing advice.
+- **Food banks** can log in, view their dashboard, manage stock, and process pending donations.
 
-The system boundary includes the Android mobile application, authentication services, produce listing management, request and collection management, mapping functionality, multilingual support, and assisted access features. External services such as Google Maps API are considered outside the system boundary and are used to provide location-based functionality. The system also uses a PostgreSQL database for the secure storage and retrieval of application data.
+The system boundary includes the Android mobile application, producer and food bank account features, donation management, food bank search, stock management, mapping functionality, and basic multilingual support. External map data is provided through OpenStreetMap using OSMDroid. The system also uses a PostgreSQL database for the storage and retrieval of application data.
 
 ---
 
@@ -29,14 +28,14 @@ The system follows a client-server architecture as shown in Figure 1. This struc
 
 | Component | Purpose |
 |-----------|---------|
-| Authentication | Manages user registration, login, logout, and password recovery. |
-| User Management | Stores and manages user profiles, roles, and account information. |
-| Produce Listing | Allows growers to create, edit and manage surplus produce listings. |
-| Request and Collection | Enables recipients to request produce and volunteers to coordinate collections. |
-| Maps | Integrates Google Maps API to display food bank and collection locations. |
-| Translation | Provides multilingual support for users requiring English or Urdu interfaces. |
-| Assisted Access | Supports users with low digital literacy through simplified navigation and larger interface elements. |
-| Database | Stores user information, produce listings, requests, collections and other application data. |
+| Authentication | Supports producer registration/login and food bank login. |
+| User Management | Stores and manages producer and food bank account information. |
+| Donation Management | Allows producers to submit surplus produce donations and food banks to process pending donations. |
+| Food Bank Search | Allows guest users to search for local food banks and view relevant details. |
+| Stock Management | Allows food banks to view and update food stock records. |
+| Maps | Uses OSMDroid and OpenStreetMap to display food bank locations. |
+| Translation | Provides basic multilingual support, including English and Urdu options on the entry screen. |
+| Database | Stores producer information, food bank details, product stock data, and donation records. |
 
 ---
 
@@ -44,18 +43,19 @@ The system follows a client-server architecture as shown in Figure 1. This struc
 
 ### Accessibility
 
-As the application is intended for use by a wide range of users, accessibility was a key consideration throughout the design process. Features such as multilingual support and simplified interface settings were incorporated to improve usability for users with varying levels of digital literacy.
+As the application is intended for use by a wide range of users, accessibility was a key consideration throughout the design process. Basic multilingual support was incorporated to improve usability for users within the local community.
 
 ### Security
 
-Security was also an important consideration due to the storage of user account information. The system must ensure that user data is protected through secure authentication and controlled access to application resources. This is particularly important as the platform supports multiple user roles.
+Security was also an important consideration due to the storage of user account information. The system uses password handling for account login, with BCrypt used for producer passwords. Further security improvements would be required in future development, including stronger access control across backend endpoints and a more complete authentication system.
 
 ### Device Compatibility
 
 The application is designed primarily for Android devices and should remain compatible with a range of device specifications, including lower-end smartphones. Whilst an internet connection is required for most functionality, the architecture allows for future support of offline features through the local storage of frequently accessed information, such as:
 
-- Previously viewed listings
 - Food bank locations
+- Previously viewed food bank details
+- Previously viewed stock or donation information
 
 ---
 
@@ -67,14 +67,18 @@ The chosen architecture was selected to provide a balance between functionality,
 
 Android Studio and Java were selected as the primary development tools due to their suitability for Android application development and the team's existing experience with these technologies.
 
+### Spring Boot
+
+Spring Boot was selected for the backend because it provides a structured way to build REST APIs, connect to a database, and separate the system into controllers, services, repositories and models.
+
 ### PostgreSQL
 
 PostgreSQL was chosen as the database solution because of its reliability, security features and compatibility with the university's database servers.
 
-### Google Maps API
+### OSMDroid and OpenStreetMap
 
-The Google Maps API was selected to support location-based functionality, allowing users to locate nearby food banks and collection points.
+OSMDroid and OpenStreetMap were selected to support location-based functionality, allowing users to locate nearby food banks without relying on the Google Maps API.
 
 ### Summary
 
-Overall, the chosen architecture provides a structured and practical solution that meets the requirements of the project while remaining achievable within the available development timeframe.
+Overall, the chosen architecture provides a structured and practical solution that meets the implemented requirements of the project while remaining achievable within the available development timeframe.
