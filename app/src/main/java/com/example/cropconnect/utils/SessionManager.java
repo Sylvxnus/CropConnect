@@ -24,21 +24,29 @@ import com.example.cropconnect.models.Producer;
  */
 public class SessionManager {
 
-    private static final String PREF_NAME    = "CropConnectSession";
-    private static final String KEY_FB_ID    = "fb_id";
-    private static final String KEY_FB_NAME  = "fb_name";
+    private static final String PREF_NAME = "CropConnectSession";
+
+    private static final String KEY_FB_ID = "fb_id";
+    private static final String KEY_FB_NAME = "fb_name";
     private static final String KEY_FB_EMAIL = "fb_email";
-    private static final String KEY_PROD_ID   = "prod_id";
+
+    private static final String KEY_PROD_ID = "prod_id";
     private static final String KEY_PROD_NAME = "prod_name";
-    private static final String KEY_PROD_EMAIL= "prod_email";
-    private static final String KEY_CREDITS   = "credits";
+    private static final String KEY_PROD_EMAIL = "prod_email";
+    private static final String KEY_PROD_POSTCODE = "prod_postcode";
+    private static final String KEY_PROD_PLOT_TYPE = "prod_plot_type";
+    private static final String KEY_PROD_ANNUAL_RENT = "prod_annual_rent";
+    private static final String KEY_ALLOTMENT_REFERENCE = "allotment_reference";
+    private static final String KEY_BCC_ACTIVE_PLOT_HOLDER = "bcc_active_plot_holder";
+
+    private static final String KEY_CREDITS = "credits";
     private static final String KEY_USER_TYPE = "user_type";
 
     private final SharedPreferences prefs;
     private final SharedPreferences.Editor editor;
 
     public SessionManager(Context context) {
-        prefs  = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         editor = prefs.edit();
     }
 
@@ -55,11 +63,7 @@ public class SessionManager {
 
     /** Called by ProducerLoginActivity */
     public static void saveProducerSession(Context context, Producer producer) {
-        new SessionManager(context).saveProducerSession(
-                producer.getProdId(),
-                producer.getProdName(),
-                producer.getProdEmail()
-        );
+        new SessionManager(context).saveProducerSession(producer);
     }
 
     /** Called by PROD_Dashboard */
@@ -75,14 +79,16 @@ public class SessionManager {
 
     public static void setCredits(Context context, int credits) {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-                .edit().putInt(KEY_CREDITS, credits).apply();
+                .edit()
+                .putInt(KEY_CREDITS, credits)
+                .apply();
     }
 
     // ── FoodBank instance methods ──────────────────────────────────────────
 
     public void saveFoodBankSession(long fbId, String fbName, String fbEmail) {
         editor.putLong(KEY_FB_ID, fbId);
-        editor.putString(KEY_FB_NAME,  fbName  != null ? fbName  : "");
+        editor.putString(KEY_FB_NAME, fbName != null ? fbName : "");
         editor.putString(KEY_FB_EMAIL, fbEmail != null ? fbEmail : "");
         editor.putString(KEY_USER_TYPE, "foodbank");
         editor.apply();
@@ -92,9 +98,17 @@ public class SessionManager {
         saveFoodBankSession(fbId, fbName, "");
     }
 
-    public long getFbId()      { return prefs.getLong(KEY_FB_ID, -1L); }
-    public String getFbName()  { return prefs.getString(KEY_FB_NAME, ""); }
-    public String getFbEmail() { return prefs.getString(KEY_FB_EMAIL, ""); }
+    public long getFbId() {
+        return prefs.getLong(KEY_FB_ID, -1L);
+    }
+
+    public String getFbName() {
+        return prefs.getString(KEY_FB_NAME, "");
+    }
+
+    public String getFbEmail() {
+        return prefs.getString(KEY_FB_EMAIL, "");
+    }
 
     // ── Producer instance methods ──────────────────────────────────────────
 
@@ -102,20 +116,79 @@ public class SessionManager {
     // against NPE if the server response omits prod_id on registration
     public void saveProducerSession(Integer prodId, String prodName, String prodEmail) {
         editor.putInt(KEY_PROD_ID, prodId != null ? prodId : -1);
-        editor.putString(KEY_PROD_NAME,  prodName  != null ? prodName  : "");
+        editor.putString(KEY_PROD_NAME, prodName != null ? prodName : "");
         editor.putString(KEY_PROD_EMAIL, prodEmail != null ? prodEmail : "");
         editor.putString(KEY_USER_TYPE, "producer");
         editor.apply();
     }
 
-    public int getProdId()       { return prefs.getInt(KEY_PROD_ID, -1); }
-    public String getProdName()  { return prefs.getString(KEY_PROD_NAME, ""); }
-    public String getProdEmail() { return prefs.getString(KEY_PROD_EMAIL, ""); }
+    public void saveProducerSession(Producer producer) {
+        if (producer == null) {
+            return;
+        }
+
+        editor.putInt(KEY_PROD_ID, producer.getProdId() != null ? producer.getProdId() : -1);
+        editor.putString(KEY_PROD_NAME, producer.getProdName() != null ? producer.getProdName() : "");
+        editor.putString(KEY_PROD_EMAIL, producer.getProdEmail() != null ? producer.getProdEmail() : "");
+        editor.putString(KEY_PROD_POSTCODE, producer.getProdPostcode() != null ? producer.getProdPostcode() : "");
+        editor.putString(KEY_PROD_PLOT_TYPE, producer.getProdPlotType() != null ? producer.getProdPlotType() : "");
+        if (producer.getProdAnnualRent() != null) {
+            editor.putFloat(KEY_PROD_ANNUAL_RENT, producer.getProdAnnualRent().floatValue());
+        } else {
+            editor.remove(KEY_PROD_ANNUAL_RENT);
+        }
+        editor.putString(KEY_ALLOTMENT_REFERENCE,
+                producer.getAllotmentReference() != null ? producer.getAllotmentReference() : "");
+        editor.putBoolean(KEY_BCC_ACTIVE_PLOT_HOLDER,
+                producer.getBccActivePlotHolder() != null ? producer.getBccActivePlotHolder() : true);
+        editor.putString(KEY_USER_TYPE, "producer");
+        editor.apply();
+    }
+
+    public int getProdId() {
+        return prefs.getInt(KEY_PROD_ID, -1);
+    }
+
+    public String getProdName() {
+        return prefs.getString(KEY_PROD_NAME, "");
+    }
+
+    public String getProdEmail() {
+        return prefs.getString(KEY_PROD_EMAIL, "");
+    }
+
+    public String getProdPostcode() {
+        return prefs.getString(KEY_PROD_POSTCODE, "");
+    }
+
+    public String getProdPlotType() {
+        return prefs.getString(KEY_PROD_PLOT_TYPE, "");
+    }
+
+    public Double getProdAnnualRent() {
+        if (!prefs.contains(KEY_PROD_ANNUAL_RENT)) {
+            return null;
+        }
+        return (double) prefs.getFloat(KEY_PROD_ANNUAL_RENT, 0f);
+    }
+
+    public String getAllotmentReference() {
+        return prefs.getString(KEY_ALLOTMENT_REFERENCE, "");
+    }
+
+    public boolean getBccActivePlotHolder() {
+        return prefs.getBoolean(KEY_BCC_ACTIVE_PLOT_HOLDER, true);
+    }
 
     // ── General ────────────────────────────────────────────────────────────
 
-    public String getUserType()  { return prefs.getString(KEY_USER_TYPE, ""); }
-    public boolean isLoggedIn()  { return !getUserType().isEmpty(); }
+    public String getUserType() {
+        return prefs.getString(KEY_USER_TYPE, "");
+    }
+
+    public boolean isLoggedIn() {
+        return !getUserType().isEmpty();
+    }
 
     public void clearSession() {
         editor.clear();
