@@ -1,11 +1,14 @@
 package com.example.cropconnect.network;
 
+import com.example.cropconnect.models.CreditHistoryItem;
+import com.example.cropconnect.models.Credits;
 import com.example.cropconnect.models.FoodBank;
 import com.example.cropconnect.models.FoodBankProduct;
 import com.example.cropconnect.models.FoodBankSearchResult;
 import com.example.cropconnect.models.Producer;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,9 +18,6 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
-import java.util.Map;
-
 
 public interface ApiService {
 
@@ -33,18 +33,15 @@ public interface ApiService {
     @GET("api/foodbanks/{fbId}/allotment-breakdown")
     Call<List<Map<String, Object>>> getAllotmentBreakdown(@Path("fbId") long fbId);
 
-    // ── FoodBank auth ──────────────────────────────────────────────────────
     @POST("api/foodbanks/login")
     Call<FoodBank> loginFoodBank(@Body FoodBank loginRequest);
 
-    // ── FoodBank data ──────────────────────────────────────────────────────
     @GET("api/foodbanks")
     Call<List<FoodBank>> getFoodBanks();
 
     @GET("api/foodbanks/search")
     Call<List<FoodBankSearchResult>> searchFoodBanksAndProducts(@Query("query") String query);
 
-    // ── Producer auth ──────────────────────────────────────────────────────
     @POST("api/producers")
     Call<Producer> registerProducer(@Body Producer producer);
 
@@ -57,7 +54,12 @@ public interface ApiService {
     @DELETE("api/producers/{id}")
     Call<Void> deleteProducer(@Path("id") long id);
 
-    // ── Products ───────────────────────────────────────────────────────────
+    @GET("api/credits/producers/{producerId}/summary")
+    Call<Credits> getCreditSummary(@Path("producerId") int producerId);
+
+    @GET("api/credits/producers/{producerId}/history")
+    Call<List<CreditHistoryItem>> getCreditHistory(@Path("producerId") int producerId);
+
     @GET("api/products")
     Call<List<FoodBankProduct>> getProducts(@Query("fbId") long fbId);
 

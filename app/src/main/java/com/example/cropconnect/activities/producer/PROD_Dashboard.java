@@ -1,22 +1,32 @@
 package com.example.cropconnect.activities.producer;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.cropconnect.R;
 import com.example.cropconnect.utils.SessionManager;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.*;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -35,13 +45,12 @@ public class PROD_Dashboard extends AppCompatActivity {
         setContentView(R.layout.producer_dashboard);
 
         session = new SessionManager(this);
-        prodId  = session.getProdId();
-
+        prodId = session.getProdId();
 
         setupHeader();
         setupBottomNav();
+        setupCreditActions();
 
-        // Set placeholders while real data loads
         ((TextView) findViewById(R.id.tvTotalKg)).setText("...");
         ((TextView) findViewById(R.id.tvDonationCount)).setText("...");
         ((TextView) findViewById(R.id.tvAwaitingCount)).setText("...");
@@ -51,6 +60,7 @@ public class PROD_Dashboard extends AppCompatActivity {
 
         if (prodId != -1) {
             loadSummary();
+            loadCreditHero();
             loadRecentActivity();
             loadPieChart();
             loadBarChart();
@@ -63,14 +73,13 @@ public class PROD_Dashboard extends AppCompatActivity {
         super.onResume();
         if (prodId != -1) {
             loadSummary();
+            loadCreditHero();
             loadRecentActivity();
             loadPieChart();
             loadBarChart();
             loadPendingDonations();
         }
     }
-
-    // ── Header ────────────────────────────────────────────────────────────
 
     private void setupHeader() {
         String name = session.getProdName();
@@ -80,48 +89,36 @@ public class PROD_Dashboard extends AppCompatActivity {
         }
     }
 
-    // ── Summary metrics ───────────────────────────────────────────────────
-
     private void loadSummary() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/"
-                        + prodId + "/summary");
+                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/" + prodId + "/summary");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
-                if (conn.getResponseCode() != 200) return;
+                if (conn.getResponseCode() != 200) {
+                    return;
+                }
 
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = reader.readLine()) != null) sb.append(line);
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
                 reader.close();
 
-                JSONObject json      = new JSONObject(sb.toString());
-                double totalKg       = json.getDouble("totalKg");
-                int donationCount    = json.getInt("donationCount");
-                int awaitingCount    = json.getInt("awaitingCount");
-                int foodBanksHelped  = json.getInt("foodBanksHelped");
-                int credits          = json.getInt("credits");
-
-                // Save credits to session so other screens can read them
-                SessionManager.setCredits(this, credits);
+                JSONObject json = new JSONObject(sb.toString());
+                double totalKg = json.getDouble("totalKg");
+                int donationCount = json.getInt("donationCount");
+                int awaitingCount = json.getInt("awaitingCount");
+                int foodBanksHelped = json.getInt("foodBanksHelped");
 
                 runOnUiThread(() -> {
-                    ((TextView) findViewById(R.id.tvTotalKg))
-                            .setText(String.format("%.0f kg", totalKg));
-                    ((TextView) findViewById(R.id.tvDonationCount))
-                            .setText(String.valueOf(donationCount));
-                    ((TextView) findViewById(R.id.tvAwaitingCount))
-                            .setText(String.valueOf(awaitingCount));
-                    ((TextView) findViewById(R.id.tvFoodBanksHelped))
-                            .setText(String.valueOf(foodBanksHelped));
-                    ((TextView) findViewById(R.id.tvCreditsNumber))
-                            .setText(String.valueOf(credits));
-                    ((TextView) findViewById(R.id.tvCreditsThisMonth))
-                            .setText("+" + credits + " credits total · 1 credit per kg");
+                    ((TextView) findViewById(R.id.tvTotalKg)).setText(String.format("%.0f kg", totalKg));
+                    ((TextView) findViewById(R.id.tvDonationCount)).setText(String.valueOf(donationCount));
+                    ((TextView) findViewById(R.id.tvAwaitingCount)).setText(String.valueOf(awaitingCount));
+                    ((TextView) findViewById(R.id.tvFoodBanksHelped)).setText(String.valueOf(foodBanksHelped));
                 });
 
             } catch (Exception e) {
@@ -130,29 +127,69 @@ public class PROD_Dashboard extends AppCompatActivity {
         }).start();
     }
 
-    // ── Pie chart — food type breakdown ───────────────────────────────────
+    private void loadCreditHero() {
+        new Thread(() -> {
+            try {
+                URL url = new URL("http://10.0.2.2:8080/api/credits/producers/" + prodId + "/summary");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                if (conn.getResponseCode() != 200) {
+                    return;
+                }
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                reader.close();
+
+                JSONObject json = new JSONObject(sb.toString());
+                int totalCredits = json.optInt("totalCredits", 0);
+                int creditsThisMonth = json.optInt("creditsThisMonth", 0);
+                int creditsPerKg = json.optInt("creditsPerKg", 10);
+                String currentTier = json.optString("currentTier", "None");
+
+                SessionManager.setCredits(this, totalCredits);
+
+                runOnUiThread(() -> {
+                    ((TextView) findViewById(R.id.tvCreditsNumber)).setText(String.valueOf(totalCredits));
+                    ((TextView) findViewById(R.id.tvCreditsThisMonth)).setText(
+                            "+" + creditsThisMonth + " credits this month · "
+                                    + creditsPerKg + " credits per kg · Tier: " + currentTier
+                    );
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
 
     private void loadPieChart() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/"
-                        + prodId + "/food-type-breakdown");
+                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/" + prodId + "/food-type-breakdown");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
-                if (conn.getResponseCode() != 200) return;
+                if (conn.getResponseCode() != 200) {
+                    return;
+                }
 
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = reader.readLine()) != null) sb.append(line);
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
                 reader.close();
 
                 JSONArray array = new JSONArray(sb.toString());
                 List<PieEntry> entries = new ArrayList<>();
 
-                // If no data yet use defaults
                 if (array.length() == 0) {
                     runOnUiThread(this::setupDefaultPieChart);
                     return;
@@ -161,7 +198,7 @@ public class PROD_Dashboard extends AppCompatActivity {
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
                     String type = obj.getString("foodType");
-                    float kg    = (float) obj.getDouble("kg");
+                    float kg = (float) obj.getDouble("kg");
                     entries.add(new PieEntry(kg, type));
                 }
 
@@ -169,12 +206,16 @@ public class PROD_Dashboard extends AppCompatActivity {
                     PieChart chart = findViewById(R.id.pieChart);
                     PieDataSet dataSet = new PieDataSet(entries, "");
                     dataSet.setColors(new int[]{
-                            Color.parseColor("#639922"), Color.parseColor("#BA7517"),
-                            Color.parseColor("#1D9E75"), Color.parseColor("#E24B4A"),
-                            Color.parseColor("#888780")});
+                            Color.parseColor("#639922"),
+                            Color.parseColor("#BA7517"),
+                            Color.parseColor("#1D9E75"),
+                            Color.parseColor("#E24B4A"),
+                            Color.parseColor("#888780")
+                    });
                     dataSet.setValueTextSize(12f);
                     dataSet.setValueTextColor(Color.WHITE);
                     dataSet.setSliceSpace(3f);
+
                     chart.setData(new PieData(dataSet));
                     chart.setHoleRadius(50f);
                     chart.setTransparentCircleRadius(54f);
@@ -197,23 +238,23 @@ public class PROD_Dashboard extends AppCompatActivity {
         chart.invalidate();
     }
 
-    // ── Bar chart — monthly kg donated ────────────────────────────────────
-
     private void loadBarChart() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/"
-                        + prodId + "/monthly");
+                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/" + prodId + "/monthly");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
-                if (conn.getResponseCode() != 200) return;
+                if (conn.getResponseCode() != 200) {
+                    return;
+                }
 
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = reader.readLine()) != null) sb.append(line);
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
                 reader.close();
 
                 JSONArray array = new JSONArray(sb.toString());
@@ -224,6 +265,7 @@ public class PROD_Dashboard extends AppCompatActivity {
 
                 List<BarEntry> entries = new ArrayList<>();
                 String[] labels = new String[array.length()];
+
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
                     labels[i] = obj.getString("month");
@@ -236,14 +278,17 @@ public class PROD_Dashboard extends AppCompatActivity {
                     BarDataSet dataSet = new BarDataSet(entries, "kg donated");
                     dataSet.setColor(Color.parseColor("#639922"));
                     dataSet.setValueTextSize(11f);
+
                     BarData data = new BarData(dataSet);
                     data.setBarWidth(0.6f);
                     chart.setData(data);
+
                     XAxis xAxis = chart.getXAxis();
                     xAxis.setValueFormatter(new IndexAxisValueFormatter(finalLabels));
                     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                     xAxis.setDrawGridLines(false);
                     xAxis.setGranularity(1f);
+
                     chart.getAxisLeft().setDrawGridLines(false);
                     chart.getAxisRight().setEnabled(false);
                     chart.getDescription().setEnabled(false);
@@ -264,29 +309,28 @@ public class PROD_Dashboard extends AppCompatActivity {
         chart.invalidate();
     }
 
-    // ── Pending donations list ─────────────────────────────────────────────
-
     private void loadPendingDonations() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/"
-                        + prodId + "/recent");
+                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/" + prodId + "/recent");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
-                if (conn.getResponseCode() != 200) return;
+                if (conn.getResponseCode() != 200) {
+                    return;
+                }
 
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = reader.readLine()) != null) sb.append(line);
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
                 reader.close();
 
                 JSONArray array = new JSONArray(sb.toString());
-
-                // Filter to only Pending and Confirmed
                 List<JSONObject> pending = new ArrayList<>();
+
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
                     String status = obj.optString("status", "");
@@ -311,27 +355,24 @@ public class PROD_Dashboard extends AppCompatActivity {
 
                     for (JSONObject obj : pending) {
                         try {
-                            String fbName  = obj.optString("fb_name", "Unknown");
-                            String items   = obj.optString("items", "");
-                            double kg      = obj.optDouble("weight_kg", 0);
-                            String status  = obj.optString("status", "Pending");
-                            String date    = obj.optString("created_at", "");
-                            // Shorten date to just the date part
-                            if (date.length() > 10) date = date.substring(0, 10);
+                            String fbName = obj.optString("fb_name", "Unknown");
+                            String items = obj.optString("items", "");
+                            double kg = obj.optDouble("weight_kg", 0);
+                            String status = obj.optString("status", "Pending");
+                            String date = obj.optString("created_at", "");
+                            if (date.length() > 10) {
+                                date = date.substring(0, 10);
+                            }
 
-                            View rowView = inflater.inflate(
-                                    R.layout.item_pending_collection_row, container, false);
+                            View rowView = inflater.inflate(R.layout.item_pending_collection_row, container, false);
 
-                            String initials = fbName.length() >= 2
-                                    ? fbName.substring(0, 2).toUpperCase() : "?";
-                            ((TextView) rowView.findViewById(R.id.tvInitials))
-                                    .setText(initials);
-                            ((TextView) rowView.findViewById(R.id.tvFoodBankName))
-                                    .setText(fbName);
+                            String initials = fbName.length() >= 2 ? fbName.substring(0, 2).toUpperCase() : "?";
+                            ((TextView) rowView.findViewById(R.id.tvInitials)).setText(initials);
+                            ((TextView) rowView.findViewById(R.id.tvFoodBankName)).setText(fbName);
                             ((TextView) rowView.findViewById(R.id.tvDonationMeta))
-                                    .setText(items + " · " + (int)kg + " kg · " + date);
+                                    .setText(items + " · " + (int) kg + " kg · " + date);
                             ((TextView) rowView.findViewById(R.id.tvCreditPreview))
-                                    .setText("+" + (int)kg + " credits on collection");
+                                    .setText("+" + toCredits(kg) + " credits on collection");
 
                             TextView tvStatus = rowView.findViewById(R.id.tvStatus);
                             tvStatus.setText(status);
@@ -355,23 +396,23 @@ public class PROD_Dashboard extends AppCompatActivity {
         }).start();
     }
 
-    // ── Recent activity ───────────────────────────────────────────────────
-
     private void loadRecentActivity() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/"
-                        + prodId + "/recent");
+                URL url = new URL("http://10.0.2.2:8080/api/donations/producer/" + prodId + "/recent");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
-                if (conn.getResponseCode() != 200) return;
+                if (conn.getResponseCode() != 200) {
+                    return;
+                }
 
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = reader.readLine()) != null) sb.append(line);
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
                 reader.close();
 
                 JSONArray array = new JSONArray(sb.toString());
@@ -382,51 +423,52 @@ public class PROD_Dashboard extends AppCompatActivity {
 
                     for (int i = 0; i < array.length(); i++) {
                         try {
-                            JSONObject obj  = array.getJSONObject(i);
-                            String fbName   = obj.optString("fb_name", "Unknown");
-                            String items    = obj.optString("items", "");
-                            double kg       = obj.optDouble("weight_kg", 0);
-                            String status   = obj.optString("status", "");
-                            String date     = obj.optString("created_at", "");
-                            if (date.length() > 10) date = date.substring(0, 10);
+                            JSONObject obj = array.getJSONObject(i);
+                            String fbName = obj.optString("fb_name", "Unknown");
+                            String items = obj.optString("items", "");
+                            double kg = obj.optDouble("weight_kg", 0);
+                            String status = obj.optString("status", "");
+                            String date = obj.optString("created_at", "");
+                            if (date.length() > 10) {
+                                date = date.substring(0, 10);
+                            }
 
                             String message;
                             int dotColor;
+
                             if (status.equals("Collected")) {
-                                message  = fbName + " collected your donation — "
-                                        + items + " · +" + (int)kg + " credits";
+                                message = fbName + " collected your donation — " + items + " · +" + toCredits(kg) + " credits";
                                 dotColor = Color.parseColor("#639922");
                             } else if (status.equals("Confirmed")) {
-                                message  = fbName + " confirmed your donation — " + items;
+                                message = fbName + " confirmed your donation — " + items;
                                 dotColor = Color.parseColor("#378ADD");
                             } else {
-                                message  = "You submitted a donation to " + fbName
-                                        + " — " + items;
+                                message = "You submitted a donation to " + fbName + " — " + items;
                                 dotColor = Color.parseColor("#BA7517");
                             }
 
-                            // Build row
                             LinearLayout row = new LinearLayout(this);
                             row.setOrientation(LinearLayout.HORIZONTAL);
-                            LinearLayout.LayoutParams rowParams =
-                                    new LinearLayout.LayoutParams(
-                                            LinearLayout.LayoutParams.MATCH_PARENT,
-                                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                            LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                            );
                             rowParams.setMargins(0, 0, 0, 24);
                             row.setLayoutParams(rowParams);
 
                             View dot = new View(this);
-                            LinearLayout.LayoutParams dotParams =
-                                    new LinearLayout.LayoutParams(20, 20);
+                            LinearLayout.LayoutParams dotParams = new LinearLayout.LayoutParams(20, 20);
                             dotParams.setMargins(0, 4, 20, 0);
                             dot.setLayoutParams(dotParams);
                             dot.setBackground(createCircleDrawable(dotColor));
                             row.addView(dot);
 
                             TextView tvText = new TextView(this);
-                            LinearLayout.LayoutParams textParams =
-                                    new LinearLayout.LayoutParams(0,
-                                            LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+                            LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
+                                    0,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    1f
+                            );
                             tvText.setLayoutParams(textParams);
                             tvText.setText(message);
                             tvText.setTextSize(13f);
@@ -451,23 +493,32 @@ public class PROD_Dashboard extends AppCompatActivity {
         }).start();
     }
 
-    // ── Bottom nav ────────────────────────────────────────────────────────
-
     private void setupBottomNav() {
         BottomNavigationView nav = findViewById(R.id.bottomNav);
         nav.setSelectedItemId(R.id.nav_dashboard);
         nav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_donate) {
-                startActivity(new android.content.Intent(this, ProcessDonations.class));
+                startActivity(new Intent(this, ProcessDonations.class));
                 return true;
             }
             if (id == R.id.nav_settings) {
-                startActivity(new android.content.Intent(this, ProducerSettingsActivity.class));
+                startActivity(new Intent(this, ProducerSettingsActivity.class));
                 return true;
             }
             return id == R.id.nav_dashboard;
         });
+    }
+
+    private void setupCreditActions() {
+        View redeemButton = findViewById(R.id.btnRedeem);
+        if (redeemButton != null) {
+            redeemButton.setOnClickListener(v -> startActivity(new Intent(this, ProcessCredits.class)));
+        }
+    }
+
+    private int toCredits(double kg) {
+        return (int) Math.round(kg * 10.0);
     }
 
     private android.graphics.drawable.ShapeDrawable createCircleDrawable(int color) {
