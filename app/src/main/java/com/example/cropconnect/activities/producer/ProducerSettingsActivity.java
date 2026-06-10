@@ -8,6 +8,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.cropconnect.R;
 import com.example.cropconnect.activities.MainActivity;
@@ -15,14 +18,14 @@ import com.example.cropconnect.models.Producer;
 import com.example.cropconnect.network.ApiClient;
 import com.example.cropconnect.network.ApiService;
 import com.example.cropconnect.utils.SessionManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,16 +34,32 @@ import retrofit2.Response;
 /**
  * ProducerSettingsActivity
  * ─────────────────────────
- * Lets a logged-in producer change their name and email.
- * Pre-fills from the saved session, sends a PUT to /api/producers/{id},
- * refreshes the session on success so the dashboard greeting stays in sync,
- * and offers a log out action. Password and postcode are not edited here.
+ * Lets a logged-in producer change their account and allotment details.
+ * Pre-fills details from the saved session, sends a PUT to /api/producers/{id},
+ * refreshes the session on success so the dashboard and credits stay in sync,
+ * and offers log out and delete account actions.
  */
 public class ProducerSettingsActivity extends AppCompatActivity {
 
-    private TextInputLayout tilName, tilEmail;
-    private TextInputEditText etName, etEmail;
-    private MaterialButton btnSave, btnLogout, btnDeleteAccount;
+    private TextInputLayout tilName;
+    private TextInputLayout tilEmail;
+    private TextInputLayout tilPostcode;
+    private TextInputLayout tilPlotType;
+    private TextInputLayout tilAnnualRent;
+    private TextInputLayout tilAllotmentReference;
+
+    private TextInputEditText etName;
+    private TextInputEditText etEmail;
+    private TextInputEditText etPostcode;
+    private TextInputEditText etPlotType;
+    private TextInputEditText etAnnualRent;
+    private TextInputEditText etAllotmentReference;
+
+    private SwitchMaterial switchActivePlotHolder;
+
+    private MaterialButton btnSave;
+    private MaterialButton btnLogout;
+    private MaterialButton btnDeleteAccount;
     private ImageButton btnBack;
     private TextView textSettingsError;
 
@@ -63,27 +82,55 @@ public class ProducerSettingsActivity extends AppCompatActivity {
 
     /** Binds all UI elements from the layout to their corresponding member variables. */
     private void bindViews() {
-        tilName           = findViewById(R.id.tilName);
-        tilEmail          = findViewById(R.id.tilEmail);
-        etName            = findViewById(R.id.etName);
-        etEmail           = findViewById(R.id.etEmail);
-        btnSave           = findViewById(R.id.btnSave);
-        btnLogout         = findViewById(R.id.btnLogout);
-        btnBack           = findViewById(R.id.btnBack);
-        btnDeleteAccount  = findViewById(R.id.btnDeleteAccount);
+        tilName = findViewById(R.id.tilName);
+        tilEmail = findViewById(R.id.tilEmail);
+        tilPostcode = findViewById(R.id.tilPostcode);
+        tilPlotType = findViewById(R.id.tilPlotType);
+        tilAnnualRent = findViewById(R.id.tilAnnualRent);
+        tilAllotmentReference = findViewById(R.id.tilAllotmentReference);
+
+        etName = findViewById(R.id.etName);
+        etEmail = findViewById(R.id.etEmail);
+        etPostcode = findViewById(R.id.etPostcode);
+        etPlotType = findViewById(R.id.etPlotType);
+        etAnnualRent = findViewById(R.id.etAnnualRent);
+        etAllotmentReference = findViewById(R.id.etAllotmentReference);
+
+        switchActivePlotHolder = findViewById(R.id.switchActivePlotHolder);
+
+        btnSave = findViewById(R.id.btnSave);
+        btnLogout = findViewById(R.id.btnLogout);
+        btnBack = findViewById(R.id.btnBack);
+        btnDeleteAccount = findViewById(R.id.btnDeleteAccount);
         textSettingsError = findViewById(R.id.textSettingsError);
     }
 
-    /** Pre-fills the name and email fields with values stored in the current session. */
+    /** Pre-fills the fields with values stored in the current session. */
     private void prefillFromSession() {
         etName.setText(session.getProdName());
         etEmail.setText(session.getProdEmail());
+        etPostcode.setText(session.getProdPostcode());
+        etPlotType.setText(session.getProdPlotType());
+
+        Double annualRent = session.getProdAnnualRent();
+        if (annualRent != null) {
+            etAnnualRent.setText(String.format(Locale.UK, "%.2f", annualRent));
+        } else {
+            etAnnualRent.setText("");
+        }
+
+        etAllotmentReference.setText(session.getAllotmentReference());
+        switchActivePlotHolder.setChecked(session.getBccActivePlotHolder());
     }
 
     /** Attaches click listeners to the back, save, log out, and delete account buttons. */
     private void setupButtons() {
         btnBack.setOnClickListener(v -> finish());
-        btnSave.setOnClickListener(v -> { if (validateForm()) saveChanges(); });
+        btnSave.setOnClickListener(v -> {
+            if (validateForm()) {
+                saveChanges();
+            }
+        });
         btnLogout.setOnClickListener(v -> logout());
         btnDeleteAccount.setOnClickListener(v -> confirmDeleteAccount());
     }
@@ -111,10 +158,11 @@ public class ProducerSettingsActivity extends AppCompatActivity {
     /** Applies top padding for the status bar to prevent UI overlap on Android 15 edge-to-edge mode. */
     private void applyWindowInsets() {
         View root = findViewById(R.id.settingsRoot);
-        final int left   = root.getPaddingLeft();
-        final int top    = root.getPaddingTop();
-        final int right  = root.getPaddingRight();
+        final int left = root.getPaddingLeft();
+        final int top = root.getPaddingTop();
+        final int right = root.getPaddingRight();
         final int bottom = root.getPaddingBottom();
+
         ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.statusBars());
             v.setPadding(left, top + bars.top, right, bottom);
@@ -122,16 +170,21 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         });
     }
 
-    /** Validates that name is non-empty and email is non-empty and well-formed. Returns true if valid. */
+    /** Validates required fields and any optional allotment/rent values the user entered. */
     private boolean validateForm() {
         boolean valid = true;
-        String name  = etName.getText()  != null ? etName.getText().toString().trim()  : "";
-        String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
+
+        String name = textOf(etName);
+        String email = textOf(etEmail);
+        String plotType = textOf(etPlotType);
+        String annualRent = textOf(etAnnualRent);
 
         if (name.isEmpty()) {
             tilName.setError("Name is required");
             valid = false;
-        } else { tilName.setError(null); }
+        } else {
+            tilName.setError(null);
+        }
 
         if (email.isEmpty()) {
             tilEmail.setError("Email is required");
@@ -139,21 +192,65 @@ public class ProducerSettingsActivity extends AppCompatActivity {
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             tilEmail.setError("Enter a valid email");
             valid = false;
-        } else { tilEmail.setError(null); }
+        } else {
+            tilEmail.setError(null);
+        }
+
+        if (!plotType.isEmpty() && !isValidPlotType(plotType)) {
+            tilPlotType.setError("Use Mini, Small, Standard, or Large");
+            valid = false;
+        } else {
+            tilPlotType.setError(null);
+        }
+
+        if (!annualRent.isEmpty()) {
+            try {
+                double value = Double.parseDouble(annualRent);
+                if (value <= 0) {
+                    tilAnnualRent.setError("Annual rent must be greater than 0");
+                    valid = false;
+                } else {
+                    tilAnnualRent.setError(null);
+                }
+            } catch (NumberFormatException e) {
+                tilAnnualRent.setError("Enter a valid rent amount");
+                valid = false;
+            }
+        } else {
+            tilAnnualRent.setError(null);
+        }
 
         return valid;
     }
 
-    /** Sends a PUT request to update the producer's name and email, then refreshes the cached session on success. */
+    /** Sends a PUT request to update the producer's details, then refreshes the cached session on success. */
     private void saveChanges() {
-        final String name  = etName.getText().toString().trim();
-        final String email = etEmail.getText().toString().trim();
-        final int prodId   = session.getProdId();
+        final String name = textOf(etName);
+        final String email = textOf(etEmail);
+        final String postcode = textOf(etPostcode);
+        final String plotType = textOf(etPlotType);
+        final String annualRentText = textOf(etAnnualRent);
+        final String allotmentReference = textOf(etAllotmentReference);
+        final boolean activePlotHolder = switchActivePlotHolder.isChecked();
+        final int prodId = session.getProdId();
 
-        // Only name and email are sent; the backend leaves password/postcode intact
         Producer update = new Producer();
         update.setProdName(name);
         update.setProdEmail(email);
+        update.setBccActivePlotHolder(activePlotHolder);
+
+        if (!postcode.isEmpty()) {
+            update.setProdPostcode(postcode);
+        }
+        if (!plotType.isEmpty()) {
+            update.setProdPlotType(toCanonicalPlotType(plotType));
+        }
+        if (!annualRentText.isEmpty()) {
+            update.setProdAnnualRent(Double.parseDouble(annualRentText));
+        }
+        if (!allotmentReference.isEmpty()) {
+            update.setAllotmentReference(allotmentReference);
+        }
 
         btnSave.setEnabled(false);
         textSettingsError.setVisibility(View.GONE);
@@ -163,11 +260,21 @@ public class ProducerSettingsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Producer> call, Response<Producer> response) {
                 btnSave.setEnabled(true);
+
                 if (response.isSuccessful() && response.body() != null) {
-                    // Keep the cached session current so the dashboard greeting updates
+                    session.saveProducerSession(response.body());
+                    Toast.makeText(
+                            ProducerSettingsActivity.this,
+                            "Profile updated",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                } else if (response.isSuccessful()) {
                     session.saveProducerSession(prodId, name, email);
-                    Toast.makeText(ProducerSettingsActivity.this,
-                            "Profile updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            ProducerSettingsActivity.this,
+                            "Profile updated",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 } else if (response.code() == 409) {
                     showError("That email is already in use");
                 } else {
@@ -206,8 +313,12 @@ public class ProducerSettingsActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     session.clearSession();
-                    Toast.makeText(ProducerSettingsActivity.this,
-                            "Account deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            ProducerSettingsActivity.this,
+                            "Account deleted",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
                     Intent intent = new Intent(ProducerSettingsActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -239,5 +350,32 @@ public class ProducerSettingsActivity extends AppCompatActivity {
     private void showError(String message) {
         textSettingsError.setText(message);
         textSettingsError.setVisibility(View.VISIBLE);
+    }
+
+    private String textOf(TextInputEditText editText) {
+        return editText.getText() == null ? "" : editText.getText().toString().trim();
+    }
+
+    private boolean isValidPlotType(String plotType) {
+        String normalized = plotType.trim().toLowerCase(Locale.UK);
+        return normalized.equals("mini")
+                || normalized.equals("small")
+                || normalized.equals("standard")
+                || normalized.equals("large");
+    }
+
+    private String toCanonicalPlotType(String plotType) {
+        String normalized = plotType.trim().toLowerCase(Locale.UK);
+        switch (normalized) {
+            case "mini":
+                return "MINI";
+            case "small":
+                return "SMALL";
+            case "large":
+                return "LARGE";
+            case "standard":
+            default:
+                return "STANDARD";
+        }
     }
 }

@@ -44,13 +44,12 @@
                     android:text="Settings"
                     android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
                     android:textColor="?attr/colorOnSurface" />
-
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Update your account details"
+                android:text="Update your account and allotment details"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:layout_marginBottom="32dp" />
@@ -58,11 +57,11 @@
             <!-- Full name -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilName"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:hint="Full name"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:hint="Full name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etName"
@@ -70,17 +69,16 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:maxLines="1" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Email address -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:hint="Email address"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:layout_marginBottom="12dp"
+                android:hint="Email address">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmail"
@@ -88,18 +86,95 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:maxLines="1" />
-
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Postcode -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPostcode"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="Postcode">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPostcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPostalAddress"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Plot type -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPlotType"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="Plot type (Mini / Small / Standard / Large)">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPlotType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Annual rent -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilAnnualRent"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="Annual rent (£)"
+                app:prefixText="£">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etAnnualRent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Allotment reference -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilAllotmentReference"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Allotment reference">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etAllotmentReference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Active plot holder -->
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchActivePlotHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="I am an active Birmingham City Council plot holder"
+                android:checked="true" />
 
             <!-- Save changes -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Save changes"
                 android:paddingTop="14dp"
-                android:paddingBottom="14dp"
-                style="@style/Widget.Material3.Button" />
+                android:paddingBottom="14dp" />
 
             <TextView
                 android:id="@+id/textSettingsError"
@@ -113,28 +188,27 @@
             <!-- Log out -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Log out"
                 android:layout_marginTop="32dp"
                 android:paddingTop="14dp"
-                android:paddingBottom="14dp"
-                style="@style/Widget.Material3.Button.OutlinedButton" />
+                android:paddingBottom="14dp" />
 
             <!-- Delete account -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDeleteAccount"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Delete account"
                 android:layout_marginTop="12dp"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
-                app:backgroundTint="#D32F2F"
-                style="@style/Widget.Material3.Button" />
+                app:backgroundTint="#D32F2F" />
 
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -143,5 +217,4 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
         app:menu="@menu/producer_bottom_nav" />
-
 </LinearLayout>
