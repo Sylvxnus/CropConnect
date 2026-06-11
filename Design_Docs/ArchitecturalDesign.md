@@ -18,7 +18,7 @@ The system boundary includes the Android mobile application, producer and food b
 
 The system follows a client-server architecture as shown in Figure 1. This structure separates the user interface, application logic and data storage, making the system easier to manage and maintain.
 
-![Figure 1: High-Level Architecture Diagram](https://github.com/user-attachments/assets/071e8e66-9de0-41aa-9ebb-1bfaa29ac724)
+![Figure 1: High-Level Architecture Diagram](https://github.com/user-attachments/assets/4a493b47-f75e-4010-b1fd-bc973e29bd3e)
 
 *Figure 1: High-Level Architecture Diagram*
 
